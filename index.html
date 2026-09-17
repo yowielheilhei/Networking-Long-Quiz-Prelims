@@ -2,365 +2,522 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Multiple Choice Quiz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Networking & Security Quiz</title>
     <style>
+        /* CSS Reset & Variables based on image_725bc6.png */
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --correct-color: #2ecc71;
-            --incorrect-color: #e74c3c;
-            --bg-color: #ecf0f1;
-            --card-bg: #ffffff;
-            --text-color: #333333;
+            --bg-color: #171926;
+            --pill-bg: #0f111a;
+            --card-bg: #1c2033;
+            --border-color: #2c314a;
+            --text-main: #ffffff;
+            --text-muted: #797f9e;
+            --accent-green: #00e676;
+            --accent-red: #ff4d4f;
+            --btn-inactive: #23273a;
+            --btn-active: #4a5482;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            padding: 20px;
-            margin: 0;
-            position: relative;
-        }
-
-        /* Hit Counter Styles */
-        .visitor-counter {
-            text-align: center;
-            margin-top: -15px;
-            margin-bottom: 20px;
-        }
-
-        .visitor-counter p {
-            margin: 0 0 5px 0;
-            font-size: 0.9em;
-            color: #7f8c8d;
-            font-weight: bold;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            margin-top: 20px;
-        }
-
-        h1 {
-            color: var(--primary-color);
-            font-size: 2.2em;
-            margin-bottom: 5px;
-        }
-
-        h2 {
-            color: var(--primary-color);
-            border-bottom: 3px solid var(--secondary-color);
-            padding-bottom: 10px;
-            margin-top: 40px;
-            display: inline-block;
-        }
-
-        .quiz-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        /* Sticky Score Board with Flexbox for the Restart Button */
-        .score-board {
-            position: sticky;
-            top: 20px;
-            background: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            color: var(--text-main);
+            font-family: var(--font-family);
             display: flex;
-            justify-content: space-between; 
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Mobile First App Container */
+        .app-container {
+            width: 100%;
+            max-width: 480px; /* Mobile width constraint */
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Top Header Pill */
+        .top-header {
+            padding: 20px 20px 10px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .user-pill {
+            background-color: var(--pill-bg);
+            border-radius: 30px;
+            display: flex;
             align-items: center;
-            font-size: 1.2em;
-            font-weight: bold;
-            color: var(--primary-color);
-            z-index: 100;
-            margin-bottom: 20px;
+            padding: 8px 16px;
+            gap: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            width: 100%;
+            justify-content: space-between;
         }
 
-        .restart-btn {
-            background-color: var(--secondary-color);
-            color: white;
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .user-stats {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .stats-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Progress Bar Section */
+        .progress-section {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            gap: 15px;
+        }
+
+        .close-btn {
+            background: none;
             border: none;
-            padding: 10px 18px;
-            font-size: 0.85em;
-            font-weight: bold;
-            border-radius: 5px;
+            color: var(--text-muted);
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            line-height: 1;
         }
 
-        .restart-btn:hover {
-            background-color: var(--primary-color);
-            transform: translateY(-2px);
-        }
-
-        .question-card {
-            background-color: var(--card-bg);
+        .progress-bar-bg {
+            flex-grow: 1;
+            background-color: var(--border-color);
+            height: 8px;
             border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--secondary-color);
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background-color: var(--accent-green);
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.3s ease-in-out;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex-grow: 1;
+            padding: 10px 20px 20px 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .question-text {
-            font-size: 1.15em;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--primary-color);
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 25px;
+            color: var(--text-main);
         }
 
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
+        /* Options List */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .option-btn {
-            background-color: #f8f9fa;
-            border: 2px solid #e9ecef;
-            color: var(--text-color);
-            padding: 12px 20px;
-            font-size: 1em;
-            text-align: left;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 12px;
+            padding: 18px 15px;
+            font-size: 1rem;
             font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
         }
 
         .option-btn:hover:not(:disabled) {
-            border-color: var(--secondary-color);
-            background-color: #eaf2f8;
+            background-color: #252a42;
+            border-color: #3f466b;
+        }
+
+        .option-btn.selected {
+            border-color: var(--text-muted);
+            background-color: #282d45;
+        }
+
+        .option-btn.correct {
+            border-color: var(--accent-green);
+            background-color: rgba(0, 230, 118, 0.1);
+            color: var(--accent-green);
+        }
+
+        .option-btn.incorrect {
+            border-color: var(--accent-red);
+            background-color: rgba(255, 77, 79, 0.1);
+            color: var(--accent-red);
         }
 
         .option-btn:disabled {
             cursor: default;
-            opacity: 0.7;
         }
 
-        .option-btn.correct {
-            background-color: var(--correct-color);
-            border-color: var(--correct-color);
-            color: white;
-        }
-
-        .option-btn.incorrect {
-            background-color: var(--incorrect-color);
-            border-color: var(--incorrect-color);
-            color: white;
-        }
-
+        /* Explanation Box */
         .explanation-box {
-            display: none;
-            margin-top: 15px;
+            margin-top: 20px;
             padding: 15px;
-            background-color: #e8f8f5;
-            border-left: 4px solid var(--correct-color);
-            border-radius: 0 5px 5px 0;
-            animation: fadeIn 0.4s ease-in-out;
+            background-color: rgba(255,255,255,0.05);
+            border-left: 4px solid var(--accent-green);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            display: none;
+            animation: fadeIn 0.3s ease;
         }
 
         .explanation-box.active {
             display: block;
         }
 
-        .explanation-title {
+        .explanation-box span {
             font-weight: bold;
-            color: #0e6251;
+            color: var(--accent-green);
+            display: block;
             margin-bottom: 5px;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Bottom Footer Action */
+        .bottom-footer {
+            padding: 20px;
+            background-color: var(--bg-color);
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 18px;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: var(--btn-inactive);
+            color: var(--text-muted);
+        }
+
+        .action-btn.ready {
+            background-color: var(--btn-active);
+            color: var(--text-main);
+        }
+
+        .action-btn.next {
+            background-color: var(--accent-green);
+            color: var(--pill-bg);
+        }
+
+        /* End Screen Elements */
+        .end-screen {
+            text-align: center;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .end-screen h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--accent-green);
         }
         
-        @media (max-width: 600px) {
-            .score-board {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
+        .end-screen p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Interactive Networking & Security Quiz</h1>
-        <p>Select the best answer for each question. The explanation will appear after you answer.</p>
-    </header>
-
-    <div class="quiz-container">
+    <div class="app-container">
         
-        <!-- Live Visitor Hit Counter -->
-        <div class="visitor-counter">
-            <p>Total Quiz Views</p>
-            <!-- Using a free API counter from seeyoufarm (no signup required) -->
-            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fnetworking-security-quiz-app.local&count_bg=%233498db&title_bg=%232c3e50&icon=&icon_color=%23E7E7E7&title=Views&edge_flat=true" alt="Page Views Counter"/>
+        <!-- Header Profile Pill -->
+        <header class="top-header">
+            <div class="user-pill">
+                <div class="user-info">
+                    <span>🌐</span>
+                    <span>IT Security</span>
+                </div>
+                <div class="user-stats">
+                    <div class="stats-item">
+                        ⭐ <span id="score-display">0</span>
+                    </div>
+                    <!-- View Counter integrated seamlessly -->
+                    <div class="stats-item">
+                        <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fnetworking-security-quiz-app.local&count_bg=%230f111a&title_bg=%230f111a&icon=&icon_color=%23E7E7E7&title=👀&edge_flat=true" alt="Views"/>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Quiz Interface -->
+        <div id="quiz-interface" style="display: flex; flex-direction: column; flex-grow: 1;">
+            
+            <div class="progress-section">
+                <!-- X Button to restart -->
+                <button class="close-btn" onclick="restartQuiz()">✕</button>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-bar"></div>
+                </div>
+            </div>
+
+            <main class="main-content">
+                <div class="question-text" id="question-text">Loading question...</div>
+                
+                <div class="options-container" id="options-container">
+                    <!-- Buttons generated by JS -->
+                </div>
+
+                <div class="explanation-box" id="explanation-box"></div>
+            </main>
+
+            <footer class="bottom-footer">
+                <button class="action-btn" id="action-btn" disabled onclick="handleAction()">CHECK</button>
+            </footer>
+
         </div>
 
-        <!-- Score Board with Restart Button -->
-        <div class="score-board">
-            <span id="score-text">Score: 0 / 0</span>
-            <button class="restart-btn" onclick="restartQuiz()">🔄 Restart Quiz</button>
+        <!-- End Screen Interface -->
+        <div id="end-screen" class="main-content end-screen">
+            <h1>Quiz Complete!</h1>
+            <p>You scored <span id="final-score" style="color: white; font-weight: bold;">0</span> out of <span id="total-qs" style="color: white; font-weight: bold;">50</span>.</p>
+            <button class="action-btn ready" onclick="restartQuiz()">RESTART QUIZ</button>
         </div>
-        
-        <h2 id="part-1-title">I. Multiple Choice</h2>
-        <div id="mc-container"></div>
 
-        <h2 id="part-2-title">II. True or False</h2>
-        <div id="tf-container"></div>
     </div>
 
     <script>
-        const mcQuestions = [
-            { q: "1. What type of routing protocol is OSPF?", ans: "C", exp: "Open Shortest Path First (OSPF) is an Interior Gateway Protocol (IGP) that relies on the link-state routing algorithm to create a complete topological map of the network.", options: { A: "Distance vector", B: "Path vector", C: "Link-state", D: "Hybrid" } },
-            { q: "2. What does OSPF use to uniquely identify an OSPF router?", ans: "C", exp: "In an OSPF domain, every router requires a unique 32-bit identifier called a Router ID to uniquely identify it within the network topology.", options: { A: "MAC Address", B: "Process ID", C: "Router ID", D: "Area ID" } },
-            { q: "3. Which OSPF packet is used to discover neighbors and establish neighbor adjacencies?", ans: "D", exp: "The OSPF Hello packet is sent periodically out of all OSPF-enabled interfaces to discover other OSPF routers and establish/maintain neighbor adjacencies.", options: { A: "Database Description", B: "Link-State Request", C: "Link-State Update", D: "Hello" } },
-            { q: "4. Which OSPF packet contains link-state advertisements?", ans: "D", exp: "Link-State Update (LSU) packets are used to reply to Link-State Requests and to announce new information. They contain one or multiple Link-State Advertisements (LSAs).", options: { A: "Hello", B: "Database Description", C: "Link-State Acknowledgment", D: "Link-State Update" } },
-            { q: "5. What is the purpose of the OSPF Hello packet?", ans: "B", exp: "Hello packets are explicitly designed to find neighboring routers on the same network segment and ensure bi-directional communication to form an adjacency.", options: { A: "Update routing tables", B: "Discover neighbors and establish adjacencies", C: "Request missing LSAs", D: "Acknowledge receipt of an LSU" } },
-            { q: "6. Which security principle ensures that only authorized users can access information?", ans: "C", exp: "Confidentiality ensures that sensitive data is kept private and is not disclosed to unauthorized individuals, programs, or processes.", options: { A: "Integrity", B: "Availability", C: "Confidentiality", D: "Authentication" } },
-            { q: "7. Which security principle ensures that data has not been altered without authorization?", ans: "D", exp: "Integrity guarantees that information is accurate, complete, and has not been modified or corrupted by unauthorized parties.", options: { A: "Confidentiality", B: "Availability", C: "Non-repudiation", D: "Integrity" } },
-            { q: "8. Which security principle ensures that authorized users can access information when needed?", ans: "C", exp: "Availability ensures that network systems, data, and applications are accessible and operational for authorized users whenever required.", options: { A: "Integrity", B: "Confidentiality", C: "Availability", D: "Authorization" } },
-            { q: "9. What is a firewall primarily used for?", ans: "A", exp: "A firewall is a network security device that monitors incoming and outgoing network traffic and decides whether to allow or block specific traffic based on a defined set of security rules.", options: { A: "Controlling and filtering network traffic", B: "Routing packets between networks", C: "Providing remote access", D: "Encrypting wireless data" } },
-            { q: "10. Why is network security implemented in multiple layers?", ans: "D", exp: "This is known as 'Defense in Depth.' If an attacker bypasses one security layer, subsequent layers provide backup protection, minimizing the overall risk.", options: { A: "To increase network speed", B: "To reduce hardware costs", C: "To simplify network management", D: "To provide multiple levels of protection against different threats" } },
-            { q: "11. An organization wants to protect its network from both external attackers and internal misuse. Which approach would provide the strongest protection?", ans: "D", exp: "Relying on a single security mechanism leaves vulnerabilities. Layered security (Defense in Depth) ensures protection from diverse attack vectors, both internal and external.", options: { A: "Install a single powerful firewall", B: "Train employees once a year", C: "Use strong passwords on all devices", D: "Use multiple security controls and apply security at different layers" } },
-            { q: "12. What is an asset in an organization?", ans: "B", exp: "In cybersecurity, an asset is any physical or digital entity (data, hardware, software, personnel) that has value to the organization and needs protection.", options: { A: "Only the physical servers", B: "Anything of value to the organization", C: "Only the digital data", D: "The network cables" } },
-            { q: "13. This protocol provides a secure remote access connection to network devices.", ans: "B", exp: "Secure Shell (SSH) is a cryptographic network protocol that provides a secure, encrypted alternative to unencrypted protocols like Telnet for remote administration.", options: { A: "Telnet", B: "SSH", C: "FTP", D: "HTTP" } },
-            { q: "14. Which type of cyberattack occurs when an attacker secretly intercepts and alters communication between two parties who believe they are communicating directly with each other?", ans: "C", exp: "In a Man-in-the-Middle (MitM) attack, the perpetrator inserts themselves into the communication channel to eavesdrop on or manipulate the traffic.", options: { A: "Denial of Service", B: "Phishing", C: "Man-in-the-Middle attack", D: "Ransomware" } },
-            { q: "15. Which type of cyberattack uses a trial-and-error method to guess login credentials, encryption keys, or other sensitive data by systematically trying all possible combinations?", ans: "B", exp: "A brute-force attack involves an automated script or tool attempting every possible combination of a password or key until the correct one is discovered.", options: { A: "SQL Injection", B: "Brute-Force Attack", C: "Cross-Site Scripting", D: "Spoofing" } },
-            { q: "16. Which type of cyberattack attempts to trick individuals into revealing sensitive information, such as usernames, passwords, credit card numbers, or other personal data?", ans: "C", exp: "Phishing uses social engineering (typically via deceptive emails or websites) to manipulate users into voluntarily giving up confidential information.", options: { A: "Malware", B: "DDoS", C: "Phishing Attack", D: "Zero-day exploit" } },
-            { q: "17. Which type of hackers are ethical hackers who use their programming and technical skills for good, ethical, and legal purposes?", ans: "C", exp: "White hat hackers are authorized security professionals who seek out vulnerabilities to help organizations patch security flaws before malicious attackers can exploit them.", options: { A: "Gray Hat Hackers", B: "Red Hat Hackers", C: "White Hat Hackers", D: "Black Hat Hackers" } },
-            { q: "18. Which type of hackers are unethical criminals who compromise computer and network security for personal gain or malicious purposes, such as attacking networks?", ans: "C", exp: "Black hat hackers illegally bypass security protocols for financial gain, data theft, or sheer malicious disruption.", options: { A: "White Hat Hackers", B: "Gray Hat Hackers", C: "Black Hat Hackers", D: "Green Hat Hackers" } },
-            { q: "19. What is the wildcard mask for the subnet mask 255.255.255.192?", ans: "B", exp: "The wildcard mask is found by subtracting the subnet mask from the global broadcast mask (255.255.255.255). (255-192=63). Result: 0.0.0.63", options: { A: "0.0.0.31", B: "0.0.0.63", C: "0.0.0.127", D: "0.0.0.255" } },
-            { q: "20. A network uses the subnet mask /27. What is its corresponding wildcard mask?", ans: "C", exp: "A /27 prefix converts to the decimal subnet mask 255.255.255.224. Subtracting this from 255.255.255.255 gives 0.0.0.31.", options: { A: "0.0.0.15", B: "0.0.0.63", C: "0.0.0.31", D: "0.0.0.7" } },
-            { q: "21. What is the wildcard mask for the subnet mask /22?", ans: "C", exp: "A /22 prefix converts to the decimal subnet mask 255.255.252.0. Subtracting from 255.255.255.255 gives 0.0.3.255.", options: { A: "0.0.1.255", B: "0.0.7.255", C: "0.0.3.255", D: "0.0.15.255" } },
-            { q: "22. Which OSPF network type requires a Designated Router and Backup Designated Router?", ans: "B", exp: "In multiaccess networks (like Ethernet), a DR and BDR are elected to reduce OSPF traffic and the number of adjacencies that need to be maintained.", options: { A: "Point-to-Point", B: "Multiaccess", C: "Non-Broadcast", D: "Point-to-Multipoint" } },
-            { q: "23. What is the primary role of the Designated Router in a multiaccess OSPF network?", ans: "A", exp: "The DR acts as a central collection and distribution point for Link-State Advertisements (LSAs) on the multiaccess network, reducing network overhead.", options: { A: "Collect and distribute LSAs", B: "Forward data packets", C: "Maintain the routing table", D: "Establish adjacencies with all routers" } },
-            { q: "24. Why is a BDR elected in a multiaccess OSPF network?", ans: "A", exp: "The Backup Designated Router maintains full adjacencies and listens to routing updates so it can immediately become the DR if the current DR goes offline.", options: { A: "To take over the DR role if the DR fails", B: "To balance the load of the DR", C: "To connect to other areas", D: "To filter LSAs" } },
-            { q: "25. Which statement best describes an LSU and an LSA?", ans: "A", exp: "A Link-State Update (LSU) is a packet type that acts as an envelope. It can carry one or multiple Link-State Advertisements (LSAs) inside it.", options: { A: "An LSU can contain one or more LSAs", B: "An LSA can contain one or more LSUs", C: "LSU and LSA are the same thing", D: "LSAs are only used in multiaccess networks" } },
-            { q: "26. Why must neighboring OSPF routers have matching Hello parameters?", ans: "A", exp: "For two OSPF routers to form a neighbor relationship, their Hello interval, Dead interval, Area ID, and authentication settings must match exactly.", options: { A: "To establish an OSPF adjacency", B: "To elect a DR", C: "To share the routing table", D: "To calculate the shortest path" } },
-            { q: "27. A network administrator wants to identify a specific OSPF router in the OSPF domain. Which value should be examined?", ans: "C", exp: "The 32-bit Router ID uniquely identifies each router operating within the OSPF routing domain.", options: { A: "Process ID", B: "Area ID", C: "Router ID", D: "Interface IP" } },
-            { q: "28. A router has a router ID of 3.3.3.3, while the other routers have IDs of 1.1.1.1 and 2.2.2.2. In a multiaccess network with equal priorities, which router would normally be elected DR?", ans: "C", exp: "If OSPF router priorities are equal (default is 1), the router with the highest Router ID is elected as the Designated Router (DR).", options: { A: "Router 1.1.1.1", B: "Router 2.2.2.2", C: "Router 3.3.3.3", D: "The router that booted first" } },
-            { q: "29. R1 and R2 are connected through a point-to-point link. The administrator expects a DR and BDR election, but none occurs. Is this behavior expected?", ans: "C", exp: "In a point-to-point link, there are only two routers communicating. There is no need for a DR or BDR to manage overhead, so the election is bypassed.", options: { A: "No, a DR must always be elected", B: "Yes, point-to-point links only elect a DR", C: "Yes, point-to-point OSPF networks do not require a DR/BDR election", D: "No, a DR/BDR election happens on all links" } },
-            { q: "30. A network administrator changes the router priority of one OSPF router on a multiaccess network. What is the primary reason for making this change?", ans: "C", exp: "Router priority (0-255) is the primary tiebreaker in OSPF elections. Setting a priority higher than other routers ensures it becomes the DR.", options: { A: "To speed up routing updates", B: "To change the router ID", C: "To influence the DR/BDR election", D: "To assign the router to a new area" } },
-            { q: "31. Which command enables OSPFv2 using router configuration mode?", ans: "C", exp: "This command initializes the OSPF routing process on a Cisco router and moves the CLI context into router configuration mode.", options: { A: "ip ospf process-id", B: "router ospf area-id", C: "router ospf process-id", D: "network ospf process-id" } },
-            { q: "32. What is the valid range of the OSPF process ID?", ans: "D", exp: "When configuring OSPF globally, the locally significant process ID must fall within the range of 1 to 65,535.", options: { A: "0-255", B: "1-1024", C: "0-65,535", D: "1-65,535" } },
-            { q: "33. Which command is used to explicitly configure an OSPF router ID?", ans: "D", exp: "Within OSPF router configuration mode, the router-id [ip-address] command is used to statically assign the Router ID.", options: { A: "ip router-id rid", B: "ospf router-id rid", C: "id router rid", D: "router-id rid" } },
-            { q: "34. What is the first preference in the OSPF router ID selection order?", ans: "D", exp: "OSPF will always prefer a manually configured Router ID using the router-id command over any active physical or loopback IP addresses.", options: { A: "Highest active IP address", B: "Lowest active IP address", C: "Highest loopback IP address", D: "Explicitly configured router ID" } },
-            { q: "35. What is the second method used by Cisco IOS to select the router ID?", ans: "B", exp: "If no explicit Router ID is configured, OSPF defaults to the highest IP address configured on an active loopback interface.", options: { A: "Lowest IPv4 address of a configured loopback interface", B: "Highest IPv4 address of a configured loopback interface", C: "Highest physical interface IP", D: "Lowest physical interface IP" } },
-            { q: "36. Which command enables OSPF on an interface by using the interface configuration mode?", ans: "C", exp: "Instead of using the network command in router mode, OSPFv2 can be enabled directly on a specific interface using this interface-level command.", options: { A: "ospf process-id area area-id", B: "interface ospf process-id area area-id", C: "ip ospf process-id area area-id", D: "network ospf process-id area area-id" } },
-            { q: "37. Which OSPF area is used in a single-area OSPF configuration?", ans: "D", exp: "Area 0 is the backbone area. In a single-area OSPF design, all routers must be placed in Area 0 to ensure proper routing functionality.", options: { A: "Area 1", B: "Area 10", C: "Area 100", D: "Area 0" } },
-            { q: "38. Which command is used to suppress OSPF routing messages from an interface while still advertising its network?", ans: "C", exp: "The passive-interface command prevents OSPF Hello packets from being sent out an interface, stopping adjacencies from forming on that port.", options: { A: "suppress-interface", B: "no-hello-interface", C: "passive-interface", D: "silent-interface" } },
-            { q: "39. Which command displays OSPF neighbor information?", ans: "C", exp: "This standard EXEC command verifies that an OSPF router has successfully formed adjacencies with its neighboring routers and displays their states.", options: { A: "show ospf neighbor", B: "show ip neighbor ospf", C: "show ip ospf neighbor", D: "show ip route ospf" } },
-            { q: "40. Which command provides detailed information about an OSPF-enabled interface?", ans: "B", exp: "This command reveals OSPF-specific parameters applied to an interface, including its Area ID, Process ID, Cost, state (DR/BDR), and timer intervals.", options: { A: "show interface ospf", B: "show ip ospf interface", C: "show ospf interface", D: "show ip interface ospf" } },
-            { q: "41. What does a wildcard mask of 0.0.0.0 accomplish when used with an OSPF network command?", ans: "C", exp: "In a wildcard mask, a '0' means the bit must match exactly. A mask of 0.0.0.0 restricts OSPF to that single specific interface address.", options: { A: "It matches any IPv4 address", B: "It matches the subnet mask", C: "It matches one exact IPv4 address", D: "It disables OSPF on the interface" } },
-            { q: "42. An administrator wants to configure OSPF process 10 on R1. Which command should be entered?", ans: "C", exp: "This initiates the OSPF routing engine and assigns it a locally significant process ID of 10.", options: { A: "ip ospf 10", B: "router ospf area 10", C: "router ospf 10", D: "network ospf 10" } },
-            { q: "43. R1 has an interface with IP address 10.1.1.5. The administrator wants to enable OSPF only on that exact interface using the network command. Which command is appropriate?", ans: "C", exp: "To match the exact IP address, the network command must specify the IP with a 0.0.0.0 wildcard mask.", options: { A: "network 10.1.1.5 255.255.255.255 area 0", B: "network 10.1.1.0 0.0.0.255 area 0", C: "network 10.1.1.5 0.0.0.0 area 0", D: "network 10.1.1.5 0.0.0.0 area 10" } },
-            { q: "44. An administrator wants to enable OSPF directly on GigabitEthernet 0/0/0 using process 10 in Area 0. Which command should be used?", ans: "C", exp: "This is the correct interface-level configuration syntax to enable OSPF without using the global network command.", options: { A: "router ospf 10 area 0", B: "network 10 area 0", C: "ip ospf 10 area 0", D: "interface ospf 10 area 0" } },
-            { q: "45. Which three goals make up the CIA Triad of network security?", ans: "B", exp: "The CIA Triad is the foundational model in cybersecurity, designed to guide policies for information security within an organization.", options: { A: "Control, Integrity, Authentication", B: "Confidentiality, Integrity, Availability", C: "Confidentiality, Identity, Availability", D: "Control, Identity, Authorization" } }
+        // Combined Array of all 50 Questions (MC + TF)
+        const allQuestions = [
+            // PART I. Multiple Choice
+            { q: "What type of routing protocol is OSPF?", ans: "C", exp: "Open Shortest Path First (OSPF) is an Interior Gateway Protocol (IGP) that relies on the link-state routing algorithm to create a complete topological map of the network.", options: { A: "Distance vector", B: "Path vector", C: "Link-state", D: "Hybrid" } },
+            { q: "What does OSPF use to uniquely identify an OSPF router?", ans: "C", exp: "In an OSPF domain, every router requires a unique 32-bit identifier called a Router ID.", options: { A: "MAC Address", B: "Process ID", C: "Router ID", D: "Area ID" } },
+            { q: "Which OSPF packet is used to discover neighbors and establish neighbor adjacencies?", ans: "D", exp: "The OSPF Hello packet is sent periodically out of all OSPF-enabled interfaces to discover other OSPF routers.", options: { A: "Database Description", B: "Link-State Request", C: "Link-State Update", D: "Hello" } },
+            { q: "Which OSPF packet contains link-state advertisements?", ans: "D", exp: "Link-State Update (LSU) packets are used to reply to Link-State Requests and announce new information.", options: { A: "Hello", B: "Database Description", C: "Link-State Acknowledgment", D: "Link-State Update" } },
+            { q: "What is the purpose of the OSPF Hello packet?", ans: "B", exp: "Hello packets are explicitly designed to find neighboring routers on the same network segment.", options: { A: "Update routing tables", B: "Discover neighbors and establish adjacencies", C: "Request missing LSAs", D: "Acknowledge receipt of an LSU" } },
+            { q: "Which security principle ensures that only authorized users can access information?", ans: "C", exp: "Confidentiality ensures that sensitive data is kept private and is not disclosed to unauthorized individuals.", options: { A: "Integrity", B: "Availability", C: "Confidentiality", D: "Authentication" } },
+            { q: "Which security principle ensures that data has not been altered without authorization?", ans: "D", exp: "Integrity guarantees that information is accurate, complete, and has not been modified or corrupted.", options: { A: "Confidentiality", B: "Availability", C: "Non-repudiation", D: "Integrity" } },
+            { q: "Which security principle ensures that authorized users can access information when needed?", ans: "C", exp: "Availability ensures that network systems, data, and applications are accessible and operational.", options: { A: "Integrity", B: "Confidentiality", C: "Availability", D: "Authorization" } },
+            { q: "What is a firewall primarily used for?", ans: "A", exp: "A firewall is a network security device that monitors network traffic and allows or blocks specific traffic.", options: { A: "Controlling and filtering network traffic", B: "Routing packets between networks", C: "Providing remote access", D: "Encrypting wireless data" } },
+            { q: "Why is network security implemented in multiple layers?", ans: "D", exp: "This is 'Defense in Depth.' If an attacker bypasses one layer, subsequent layers provide backup protection.", options: { A: "To increase network speed", B: "To reduce hardware costs", C: "To simplify management", D: "To provide multiple levels of protection" } },
+            { q: "An organization wants to protect its network from both external attackers and internal misuse. Which approach is strongest?", ans: "D", exp: "Layered security (Defense in Depth) ensures protection from diverse attack vectors.", options: { A: "Install a single firewall", B: "Train employees annually", C: "Use strong passwords", D: "Use multiple controls at different layers" } },
+            { q: "What is an asset in an organization?", ans: "B", exp: "In cybersecurity, an asset is any physical or digital entity that has value and needs protection.", options: { A: "Physical servers only", B: "Anything of value to the organization", C: "Digital data only", D: "Network cables" } },
+            { q: "This protocol provides a secure remote access connection to network devices.", ans: "B", exp: "Secure Shell (SSH) provides a secure, encrypted alternative to unencrypted protocols like Telnet.", options: { A: "Telnet", B: "SSH", C: "FTP", D: "HTTP" } },
+            { q: "Which type of cyberattack secretly intercepts and alters communication between two parties?", ans: "C", exp: "In a Man-in-the-Middle (MitM) attack, the perpetrator eavesdrops on or manipulates the traffic.", options: { A: "Denial of Service", B: "Phishing", C: "Man-in-the-Middle attack", D: "Ransomware" } },
+            { q: "Which type of cyberattack uses trial-and-error to systematically guess login credentials?", ans: "B", exp: "A brute-force attack involves attempting every possible combination of a password until successful.", options: { A: "SQL Injection", B: "Brute-Force Attack", C: "Cross-Site Scripting", D: "Spoofing" } },
+            { q: "Which type of cyberattack tricks individuals into revealing sensitive information?", ans: "C", exp: "Phishing uses social engineering via deceptive emails or websites to manipulate users.", options: { A: "Malware", B: "DDoS", C: "Phishing Attack", D: "Zero-day exploit" } },
+            { q: "Which type of hackers are ethical professionals who use their skills for legal purposes?", ans: "C", exp: "White hat hackers are authorized security professionals who patch flaws before malicious attackers exploit them.", options: { A: "Gray Hat", B: "Red Hat", C: "White Hat", D: "Black Hat" } },
+            { q: "Which type of hackers are unethical criminals who compromise security for malicious purposes?", ans: "C", exp: "Black hat hackers illegally bypass security protocols for financial gain or data theft.", options: { A: "White Hat", B: "Gray Hat", C: "Black Hat", D: "Green Hat" } },
+            { q: "What is the wildcard mask for the subnet mask 255.255.255.192?", ans: "B", exp: "Subtracting 255.255.255.192 from 255.255.255.255 gives 0.0.0.63.", options: { A: "0.0.0.31", B: "0.0.0.63", C: "0.0.0.127", D: "0.0.0.255" } },
+            { q: "A network uses the subnet mask /27. What is its corresponding wildcard mask?", ans: "C", exp: "A /27 prefix is 255.255.255.224. Subtracting this from 255.255.255.255 gives 0.0.0.31.", options: { A: "0.0.0.15", B: "0.0.0.63", C: "0.0.0.31", D: "0.0.0.7" } },
+            { q: "What is the wildcard mask for the subnet mask /22?", ans: "C", exp: "A /22 is 255.255.252.0. Subtracting from 255.255.255.255 gives 0.0.3.255.", options: { A: "0.0.1.255", B: "0.0.7.255", C: "0.0.3.255", D: "0.0.15.255" } },
+            { q: "Which OSPF network type requires a Designated Router and Backup Designated Router?", ans: "B", exp: "In multiaccess networks (like Ethernet), a DR and BDR reduce OSPF traffic overhead.", options: { A: "Point-to-Point", B: "Multiaccess", C: "Non-Broadcast", D: "Point-to-Multipoint" } },
+            { q: "What is the primary role of the Designated Router in a multiaccess OSPF network?", ans: "A", exp: "The DR acts as a central collection and distribution point for Link-State Advertisements (LSAs).", options: { A: "Collect and distribute LSAs", B: "Forward data packets", C: "Maintain the routing table", D: "Establish adjacencies with all" } },
+            { q: "Why is a BDR elected in a multiaccess OSPF network?", ans: "A", exp: "The Backup Designated Router listens to routing updates to immediately become the DR if it goes offline.", options: { A: "To take over if the DR fails", B: "To balance the DR load", C: "To connect to other areas", D: "To filter LSAs" } },
+            { q: "Which statement best describes an LSU and an LSA?", ans: "A", exp: "A Link-State Update (LSU) is a packet type that acts as an envelope to carry one or multiple LSAs.", options: { A: "An LSU can contain one or more LSAs", B: "An LSA can contain one or more LSUs", C: "They are the same thing", D: "LSAs are only for multiaccess" } },
+            { q: "Why must neighboring OSPF routers have matching Hello parameters?", ans: "A", exp: "Hello interval, Dead interval, Area ID, and authentication settings must match exactly to form an adjacency.", options: { A: "To establish an adjacency", B: "To elect a DR", C: "To share the routing table", D: "To calculate shortest path" } },
+            { q: "A network administrator wants to identify a specific OSPF router. Which value should be examined?", ans: "C", exp: "The 32-bit Router ID uniquely identifies each router operating within the OSPF routing domain.", options: { A: "Process ID", B: "Area ID", C: "Router ID", D: "Interface IP" } },
+            { q: "A router has a router ID of 3.3.3.3, others are 1.1.1.1 and 2.2.2.2. With equal priorities, which is elected DR?", ans: "C", exp: "If OSPF router priorities are equal, the router with the highest Router ID is elected Designated Router.", options: { A: "Router 1.1.1.1", B: "Router 2.2.2.2", C: "Router 3.3.3.3", D: "The one that booted first" } },
+            { q: "R1 and R2 connect via a point-to-point link. A DR election doesn't occur. Is this expected?", ans: "C", exp: "In a point-to-point link, there are only two routers communicating. There is no need for a DR or BDR.", options: { A: "No, a DR must be elected", B: "Yes, they only elect a DR", C: "Yes, point-to-point links bypass elections", D: "No, elections happen on all links" } },
+            { q: "A network administrator changes the router priority on a multiaccess network. What is the reason?", ans: "C", exp: "Router priority (0-255) is the primary tiebreaker in OSPF elections to manually select the DR.", options: { A: "To speed up routing", B: "To change the router ID", C: "To influence the DR/BDR election", D: "To assign a new area" } },
+            { q: "Which command enables OSPFv2 using router configuration mode?", ans: "C", exp: "This command initializes the OSPF routing process and moves the CLI context into router config mode.", options: { A: "ip ospf process-id", B: "router ospf area-id", C: "router ospf process-id", D: "network ospf process-id" } },
+            { q: "What is the valid range of the OSPF process ID?", ans: "D", exp: "When configuring OSPF globally, the locally significant process ID must fall within 1 to 65,535.", options: { A: "0-255", B: "1-1024", C: "0-65,535", D: "1-65,535" } },
+            { q: "Which command explicitly configures an OSPF router ID?", ans: "D", exp: "Within OSPF router configuration mode, the router-id command statically assigns the Router ID.", options: { A: "ip router-id rid", B: "ospf router-id rid", C: "id router rid", D: "router-id rid" } },
+            { q: "What is the first preference in the OSPF router ID selection order?", ans: "D", exp: "OSPF always prefers a manually configured Router ID over any active physical or loopback IP addresses.", options: { A: "Highest active IP", B: "Lowest active IP", C: "Highest loopback IP", D: "Explicitly configured router ID" } },
+            { q: "What is the second method used by Cisco IOS to select the router ID?", ans: "B", exp: "If no explicit Router ID is set, OSPF defaults to the highest IP address on an active loopback interface.", options: { A: "Lowest loopback IP", B: "Highest loopback IP", C: "Highest physical IP", D: "Lowest physical IP" } },
+            { q: "Which command enables OSPF on an interface using interface configuration mode?", ans: "C", exp: "Instead of using the global network command, OSPFv2 can be enabled directly on a specific interface.", options: { A: "ospf process-id area area-id", B: "interface ospf process area", C: "ip ospf process-id area area-id", D: "network ospf process area" } },
+            { q: "Which OSPF area is used in a single-area OSPF configuration?", ans: "D", exp: "Area 0 is the backbone area. In a single-area OSPF design, all routers must be placed in Area 0.", options: { A: "Area 1", B: "Area 10", C: "Area 100", D: "Area 0" } },
+            { q: "Which command suppresses OSPF messages from an interface while still advertising its network?", ans: "C", exp: "The passive-interface command stops OSPF Hello packets from being sent out an interface.", options: { A: "suppress-interface", B: "no-hello-interface", C: "passive-interface", D: "silent-interface" } },
+            { q: "Which command displays OSPF neighbor information?", ans: "C", exp: "This standard EXEC command verifies that an OSPF router has successfully formed adjacencies.", options: { A: "show ospf neighbor", B: "show ip neighbor ospf", C: "show ip ospf neighbor", D: "show ip route ospf" } },
+            { q: "Which command provides detailed information about an OSPF-enabled interface?", ans: "B", exp: "This command reveals parameters like Area ID, Process ID, Cost, state (DR/BDR), and timer intervals.", options: { A: "show interface ospf", B: "show ip ospf interface", C: "show ospf interface", D: "show ip interface ospf" } },
+            { q: "What does a wildcard mask of 0.0.0.0 accomplish when used with an OSPF network command?", ans: "C", exp: "A '0' means the bit must match exactly. 0.0.0.0 restricts OSPF to one single specific interface address.", options: { A: "Matches any IP address", B: "Matches the subnet mask", C: "Matches one exact IPv4 address", D: "Disables OSPF" } },
+            { q: "An administrator wants to configure OSPF process 10 on R1. Which command should be entered?", ans: "C", exp: "This initiates the OSPF routing engine and assigns it a locally significant process ID of 10.", options: { A: "ip ospf 10", B: "router ospf area 10", C: "router ospf 10", D: "network ospf 10" } },
+            { q: "R1 has an interface 10.1.1.5. Enable OSPF only on that exact interface using the network command.", ans: "C", exp: "To match the exact IP address, the network command must specify the IP with a 0.0.0.0 wildcard mask.", options: { A: "network 10.1.1.5 255.255.255.255 area 0", B: "network 10.1.1.0 0.0.0.255 area 0", C: "network 10.1.1.5 0.0.0.0 area 0", D: "network 10.1.1.5 0.0.0.0 area 10" } },
+            { q: "Enable OSPF directly on GigabitEthernet 0/0/0 using process 10 in Area 0. Which command?", ans: "C", exp: "This is the correct interface-level configuration syntax to enable OSPF without the global network command.", options: { A: "router ospf 10 area 0", B: "network 10 area 0", C: "ip ospf 10 area 0", D: "interface ospf 10 area 0" } },
+            { q: "Which three goals make up the CIA Triad of network security?", ans: "B", exp: "The CIA Triad (Confidentiality, Integrity, Availability) is the foundational model in cybersecurity.", options: { A: "Control, Integrity, Authentication", B: "Confidentiality, Integrity, Availability", C: "Confidentiality, Identity, Availability", D: "Control, Identity, Authorization" } },
+            
+            // PART II. True or False
+            { q: "Use the router-id rid router configuration mode command to manually assign a router ID.", ans: "True", exp: "The router-id [ip-address] command is the standard method for manually assigning a unique Router ID.", options: { "True": "True", "False": "False" } },
+            { q: "When configuring single-area OSPFv2, the network command must use the same area-id on all routers.", ans: "True", exp: "For routers to form adjacencies in a single-area setup, they must all belong to the exact same area (usually Area 0).", options: { "True": "True", "False": "False" } },
+            { q: "The basic syntax for the network command is ip ospf process-id area area-id.", ans: "False", exp: "That syntax is for interface-specific config. The global command is: network [address] [wildcard-mask] area [area-id].", options: { "True": "True", "False": "False" } },
+            { q: "Remove the network commands using the delete form of the command.", ans: "False", exp: "In Cisco IOS, commands are negated or removed using the 'no' keyword, not 'delete'.", options: { "True": "True", "False": "False" } },
+            { q: "OSPFv2 is enabled using the router ospf area-id command.", ans: "False", exp: "OSPFv2 is initialized globally using the process ID, not the area ID. (router ospf process-id).", options: { "True": "True", "False": "False" } }
         ];
 
-        const tfQuestions = [
-            { q: "1. Use the router-id rid router configuration mode command to manually assign a router ID.", ans: "True", exp: "The router-id [ip-address] command inside OSPF configuration mode is the standard method for manually assigning a unique Router ID." },
-            { q: "2. When configuring single-area OSPFv2, the network command must be configured with the same area-id value on all routers.", ans: "True", exp: "For routers to form adjacencies and share routing tables in a single-area setup, they must all be configured to belong to the exact same area (typically Area 0)." },
-            { q: "3. The basic syntax for the network command is ip ospf process-id area area-id.", ans: "False", exp: "That syntax is used for interface-specific configuration mode. The basic syntax for the standard global network command is: network [network-address] [wildcard-mask] area [area-id]." },
-            { q: "4. Remove the network commands using the delete form of the command.", ans: "False", exp: "In Cisco IOS, commands are negated or removed using the no keyword, not delete." },
-            { q: "5. OSPFv2 is enabled using the router ospf area-id command.", ans: "False", exp: "OSPFv2 is initialized globally using the process ID, not the area ID. The correct command is router ospf process-id." }
-        ];
+        let currentIndex = 0;
+        let score = 0;
+        let selectedKey = null;
+        let isAnswerChecked = false;
 
-        let currentScore = 0;
-        let answeredQuestions = 0;
-        const totalQuestions = mcQuestions.length + tfQuestions.length;
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const actionBtn = document.getElementById('action-btn');
+        const explanationBox = document.getElementById('explanation-box');
+        const progressBar = document.getElementById('progress-bar');
+        const scoreDisplay = document.getElementById('score-display');
+        const quizInterface = document.getElementById('quiz-interface');
+        const endScreen = document.getElementById('end-screen');
+        const finalScore = document.getElementById('final-score');
+        const totalQs = document.getElementById('total-qs');
 
-        function updateScore() {
-            const percentage = Math.round((currentScore / totalQuestions) * 100);
-            document.getElementById('score-text').innerText = `Score: ${currentScore} / ${totalQuestions} (${percentage}%)`;
+        totalQs.innerText = allQuestions.length;
+
+        function updateProgress() {
+            const progress = (currentIndex / allQuestions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function loadQuestion() {
+            if (currentIndex >= allQuestions.length) {
+                showEndScreen();
+                return;
+            }
+
+            const currentQ = allQuestions[currentIndex];
+            questionTextEl.innerText = `${currentIndex + 1}. ${currentQ.q}`;
+            optionsContainer.innerHTML = '';
+            explanationBox.classList.remove('active');
+            
+            selectedKey = null;
+            isAnswerChecked = false;
+            
+            actionBtn.innerText = 'CHECK';
+            actionBtn.className = 'action-btn';
+            actionBtn.disabled = true;
+
+            for (const [key, value] of Object.entries(currentQ.options)) {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                // Only show the value (e.g. "Tamar" instead of "A. Tamar") to match the design
+                btn.innerText = value;
+                btn.dataset.key = key;
+
+                btn.onclick = () => selectOption(btn, key);
+                optionsContainer.appendChild(btn);
+            }
+            
+            updateProgress();
+        }
+
+        function selectOption(btn, key) {
+            if (isAnswerChecked) return; // Prevent changing answer after checking
+
+            // Remove selected class from all
+            const allBtns = optionsContainer.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.classList.remove('selected'));
+
+            // Add selected to clicked
+            btn.classList.add('selected');
+            selectedKey = key;
+
+            // Enable check button
+            actionBtn.disabled = false;
+            actionBtn.classList.add('ready');
+        }
+
+        function handleAction() {
+            if (!isAnswerChecked) {
+                checkAnswer();
+            } else {
+                currentIndex++;
+                loadQuestion();
+            }
+        }
+
+        function checkAnswer() {
+            const currentQ = allQuestions[currentIndex];
+            const allBtns = optionsContainer.querySelectorAll('.option-btn');
+            
+            isAnswerChecked = true;
+
+            allBtns.forEach(b => {
+                b.disabled = true; // lock buttons
+                const btnKey = b.dataset.key;
+                
+                // Highlight Correct answer
+                if (btnKey === currentQ.ans) {
+                    b.classList.add('correct');
+                }
+                
+                // Highlight selected wrong answer
+                if (btnKey === selectedKey && selectedKey !== currentQ.ans) {
+                    b.classList.add('incorrect');
+                }
+            });
+
+            // Update Score
+            if (selectedKey === currentQ.ans) {
+                score++;
+                scoreDisplay.innerText = score;
+            }
+
+            // Show explanation
+            explanationBox.innerHTML = `<span>Explanation:</span>${currentQ.exp}`;
+            explanationBox.classList.add('active');
+
+            // Update action button
+            actionBtn.innerText = 'NEXT';
+            actionBtn.className = 'action-btn next';
+        }
+
+        function showEndScreen() {
+            quizInterface.style.display = 'none';
+            endScreen.style.display = 'flex';
+            progressBar.style.width = '100%';
+            finalScore.innerText = score;
         }
 
         function restartQuiz() {
-            currentScore = 0;
-            answeredQuestions = 0;
-            
-            document.getElementById('mc-container').innerHTML = '';
-            document.getElementById('tf-container').innerHTML = '';
-            
-            createQuiz(mcQuestions, 'mc-container', false);
-            createQuiz(tfQuestions, 'tf-container', true);
-            
-            updateScore();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            currentIndex = 0;
+            score = 0;
+            scoreDisplay.innerText = '0';
+            quizInterface.style.display = 'flex';
+            endScreen.style.display = 'none';
+            loadQuestion();
         }
 
-        function createQuiz(questions, containerId, isTF = false) {
-            const container = document.getElementById(containerId);
-            
-            questions.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = 'question-card';
-                
-                const questionText = document.createElement('div');
-                questionText.className = 'question-text';
-                questionText.innerText = item.q;
-                card.appendChild(questionText);
-
-                const optionsGrid = document.createElement('div');
-                optionsGrid.className = 'options-grid';
-
-                let options = isTF ? { "True": "True", "False": "False" } : item.options;
-
-                for (const [key, value] of Object.entries(options)) {
-                    const btn = document.createElement('button');
-                    btn.className = 'option-btn';
-                    btn.innerText = isTF ? key : `${key}. ${value}`;
-                    
-                    btn.onclick = function() {
-                        const allBtns = optionsGrid.querySelectorAll('.option-btn');
-                        allBtns.forEach(b => b.disabled = true);
-
-                        if (key === item.ans) {
-                            btn.classList.add('correct');
-                            currentScore++;
-                        } else {
-                            btn.classList.add('incorrect');
-                            allBtns.forEach(b => {
-                                if (b.innerText.startsWith(item.ans)) {
-                                    b.classList.add('correct');
-                                }
-                            });
-                        }
-                        
-                        expBox.classList.add('active');
-                        answeredQuestions++;
-                        updateScore();
-                    };
-                    optionsGrid.appendChild(btn);
-                }
-                card.appendChild(optionsGrid);
-
-                const expBox = document.createElement('div');
-                expBox.className = 'explanation-box';
-                expBox.innerHTML = `<div class="explanation-title">Explanation:</div>${item.exp}`;
-                card.appendChild(expBox);
-
-                container.appendChild(card);
-            });
-        }
-
-        window.onload = () => {
-            createQuiz(mcQuestions, 'mc-container', false);
-            createQuiz(tfQuestions, 'tf-container', true);
-            updateScore();
-        };
+        // Initialize first question on load
+        window.onload = loadQuestion;
     </script>
 </body>
 </html>
