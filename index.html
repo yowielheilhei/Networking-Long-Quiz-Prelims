@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Networking & Security Quiz</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --hover-color: #2980b9;
+            --accent-color: #1abc9c;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            display: inline-block;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .quiz-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease-in-out;
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        .question-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .question-text {
+            font-size: 1.15em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--hover-color);
+        }
+
+        .btn-global {
+            background-color: var(--primary-color);
+            margin: 0 10px;
+        }
+        
+        .btn-global:hover {
+            background-color: #1a252f;
+        }
+
+        .answer-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #e8f8f5;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 0 5px 5px 0;
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .answer-section.active {
+            display: block;
+        }
+
+        .answer-title {
+            font-weight: 700;
+            color: #0e6251;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .explanation-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2em; }
+            .question-card { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Networking Long Quiz Answers</h1>
+        <p>Read the question, guess the answer, and click "Show Answer" to check your knowledge!</p>
+    </header>
+
+    <div class="controls">
+        <button class="btn btn-global" onclick="toggleAll(true)">Show All Answers</button>
+        <button class="btn btn-global" onclick="toggleAll(false)">Hide All Answers</button>
+    </div>
+
+    <div class="quiz-container">
+        
+        <h2>Part I. Multiple Choice</h2>
+
+        <!-- Question 1 -->
+        <div class="question-card">
+            <div class="question-text">1. What type of routing protocol is OSPF?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – Link-state</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Open Shortest Path First (OSPF) is an Interior Gateway Protocol (IGP) that relies on the link-state routing algorithm to create a complete topological map of the network.</div>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-card">
+            <div class="question-text">2. What does OSPF use to uniquely identify an OSPF router?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – Router ID</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>In an OSPF domain, every router requires a unique 32-bit identifier called a Router ID to uniquely identify it within the network topology.</div>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-card">
+            <div class="question-text">3. Which OSPF packet is used to discover neighbors and establish neighbor adjacencies?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: D – Hello</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>The OSPF Hello packet is sent periodically out of all OSPF-enabled interfaces to discover other OSPF routers and establish/maintain neighbor adjacencies.</div>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-card">
+            <div class="question-text">4. Which OSPF packet contains link-state advertisements?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: D – Link-State Update</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Link-State Update (LSU) packets are used to reply to Link-State Requests and to announce new information. They contain one or multiple Link-State Advertisements (LSAs).</div>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-card">
+            <div class="question-text">5. What is the purpose of the OSPF Hello packet?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: B – Discover neighbors and establish adjacencies</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Hello packets are explicitly designed to find neighboring routers on the same network segment and ensure bi-directional communication to form an adjacency.</div>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question-card">
+            <div class="question-text">6. Which security principle ensures that only authorized users can access information?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – Confidentiality</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Confidentiality ensures that sensitive data is kept private and is not disclosed to unauthorized individuals, programs, or processes.</div>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question-card">
+            <div class="question-text">7. Which security principle ensures that data has not been altered without authorization?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: D – Integrity</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Integrity guarantees that information is accurate, complete, and has not been modified or corrupted by unauthorized parties.</div>
+            </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question-card">
+            <div class="question-text">8. Which security principle ensures that authorized users can access information when needed?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – Availability</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Availability ensures that network systems, data, and applications are accessible and operational for authorized users whenever required.</div>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question-card">
+            <div class="question-text">9. What is a firewall primarily used for?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: A – Controlling and filtering network traffic</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>A firewall is a network security device that monitors incoming and outgoing network traffic and decides whether to allow or block specific traffic based on a defined set of security rules.</div>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question-card">
+            <div class="question-text">10. Why is network security implemented in multiple layers?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: D – To provide multiple levels of protection against different threats</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>This is known as "Defense in Depth." If an attacker bypasses one security layer, subsequent layers provide backup protection, minimizing the overall risk.</div>
+            </div>
+        </div>
+
+        <!-- Question 11 -->
+        <div class="question-card">
+            <div class="question-text">11. An organization wants to protect its network from both external attackers and internal misuse. Which approach would provide the strongest protection?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: D – Use multiple security controls and apply security at different layers</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Relying on a single security mechanism leaves vulnerabilities. Layered security (Defense in Depth) ensures protection from diverse attack vectors, both internal and external.</div>
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question-card">
+            <div class="question-text">12. What is an asset in an organization?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: B – Anything of value to the organization</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>In cybersecurity, an asset is any physical or digital entity (data, hardware, software, personnel) that has value to the organization and needs protection.</div>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question-card">
+            <div class="question-text">13. This protocol provides a secure remote access connection to network devices.</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: B – SSH</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Secure Shell (SSH) is a cryptographic network protocol that provides a secure, encrypted alternative to unencrypted protocols like Telnet for remote administration.</div>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question-card">
+            <div class="question-text">14. Which type of cyberattack occurs when an attacker secretly intercepts and alters communication between two parties who believe they are communicating directly with each other?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – Man-in-the-Middle attack</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>In a Man-in-the-Middle (MitM) attack, the perpetrator inserts themselves into the communication channel to eavesdrop on or manipulate the traffic.</div>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question-card">
+            <div class="question-text">15. Which type of cyberattack uses a trial-and-error method to guess login credentials, encryption keys, or other sensitive data by systematically trying all possible combinations?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: B – Brute-Force Attack</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>A brute-force attack involves an automated script or tool attempting every possible combination of a password or key until the correct one is discovered.</div>
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="question-card">
+            <div class="question-text">16. Which type of cyberattack attempts to trick individuals into revealing sensitive information, such as usernames, passwords, credit card numbers, or other personal data?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – Phishing Attack</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Phishing uses social engineering (typically via deceptive emails or websites) to manipulate users into voluntarily giving up confidential information.</div>
+            </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="question-card">
+            <div class="question-text">17. Which type of hackers are ethical hackers who use their programming and technical skills for good, ethical, and legal purposes?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – White Hat Hackers</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>White hat hackers are authorized security professionals who seek out vulnerabilities to help organizations patch security flaws before malicious attackers can exploit them.</div>
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="question-card">
+            <div class="question-text">18. Which type of hackers are unethical criminals who compromise computer and network security for personal gain or malicious purposes, such as attacking networks?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – Black Hat Hackers</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Black hat hackers illegally bypass security protocols for financial gain, data theft, or sheer malicious disruption.</div>
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="question-card">
+            <div class="question-text">19. What is the wildcard mask for the subnet mask 255.255.255.192?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: B – 0.0.0.63</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>The wildcard mask is found by subtracting the subnet mask from the global broadcast mask (255.255.255.255). Step-by-step: Step 1: Write down the global broadcast mask: 255.255.255.255 Step 2: Write down the given subnet mask: 255.255.255.192 Step 3: Subtract octet by octet: (255-255=0), (255-255=0), (255-255=0), (255-192=63) Final result: 0.0.0.63</div>
+            </div>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="question-card">
+            <div class="question-text">20. A network uses the subnet mask /27. What is its corresponding wildcard mask?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – 0.0.0.31</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>A /27 prefix converts to the decimal subnet mask 255.255.255.224. Subtracting this from 255.255.255.255 gives the wildcard mask. Step-by-step: Step 1: Convert /27 to dotted decimal: 255.255.255.224 Step 2: Write down the global broadcast mask: 255.255.255.255 Step 3: Subtract the subnet mask: 255.255.255.255 - 255.255.255.224 Final result: 0.0.0.31</div>
+            </div>
+        </div>
+
+        <!-- Question 21 -->
+        <div class="question-card">
+            <div class="question-text">21. What is the wildcard mask for the subnet mask /22?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – 0.0.3.255</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>A /22 prefix converts to the decimal subnet mask 255.255.252.0. Step-by-step: Step 1: Convert /22 to dotted decimal: 255.255.252.0 Step 2: Write down the global broadcast mask: 255.255.255.255 Step 3: Subtract the subnet mask: (255-255=0), (255-255=0), (255-252=3), (255-0=255) Final result: 0.0.3.255</div>
+            </div>
+        </div>
+
+        <!-- Question 22 -->
+        <div class="question-card">
+            <div class="question-text">22. Which OSPF network type requires a Designated Router and Backup Designated Router?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: B – Multiaccess</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>In multiaccess networks (like Ethernet), a DR and BDR are elected to reduce OSPF traffic and the number of adjacencies that need to be maintained.</div>
+            </div>
+        </div>
+
+        <!-- Question 23 -->
+        <div class="question-card">
+            <div class="question-text">23. What is the primary role of the Designated Router in a multiaccess OSPF network?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: A – Collect and distribute LSAs</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>The DR acts as a central collection and distribution point for Link-State Advertisements (LSAs) on the multiaccess network, reducing network overhead.</div>
+            </div>
+        </div>
+
+        <!-- Question 24 -->
+        <div class="question-card">
+            <div class="question-text">24. Why is a BDR elected in a multiaccess OSPF network?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: A – To take over the DR role if the DR fails</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>The Backup Designated Router maintains full adjacencies and listens to routing updates so it can immediately become the DR if the current DR goes offline.</div>
+            </div>
+        </div>
+
+        <!-- Question 25 -->
+        <div class="question-card">
+            <div class="question-text">25. Which statement best describes an LSU and an LSA?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: A – An LSU can contain one or more LSAs</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>A Link-State Update (LSU) is a packet type that acts as an envelope. It can carry one or multiple Link-State Advertisements (LSAs) inside it.</div>
+            </div>
+        </div>
+
+        <!-- Question 26 -->
+        <div class="question-card">
+            <div class="question-text">26. Why must neighboring OSPF routers have matching Hello parameters?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: A – To establish an OSPF adjacency</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>For two OSPF routers to form a neighbor relationship, their Hello interval, Dead interval, Area ID, and authentication settings must match exactly.</div>
+            </div>
+        </div>
+
+        <!-- Question 27 -->
+        <div class="question-card">
+            <div class="question-text">27. A network administrator wants to identify a specific OSPF router in the OSPF domain. Which value should be examined?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – Router ID</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>The 32-bit Router ID uniquely identifies each router operating within the OSPF routing domain.</div>
+            </div>
+        </div>
+
+        <!-- Question 28 -->
+        <div class="question-card">
+            <div class="question-text">28. A router has a router ID of 3.3.3.3, while the other routers have IDs of 1.1.1.1 and 2.2.2.2. In a multiaccess network with equal priorities, which router would normally be elected DR?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – Router 3.3.3.3</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>If OSPF router priorities are equal (default is 1), the router with the highest Router ID is elected as the Designated Router (DR).</div>
+            </div>
+        </div>
+
+        <!-- Question 29 -->
+        <div class="question-card">
+            <div class="question-text">29. R1 and R2 are connected through a point-to-point link. The administrator expects a DR and BDR election, but none occurs. Is this behavior expected?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – Yes, point-to-point OSPF networks do not require a DR/BDR election</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>In a point-to-point link, there are only two routers communicating. There is no need for a DR or BDR to manage overhead, so the election is bypassed.</div>
+            </div>
+        </div>
+
+        <!-- Question 30 -->
+        <div class="question-card">
+            <div class="question-text">30. A network administrator changes the router priority of one OSPF router on a multiaccess network. What is the primary reason for making this change?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – To influence the DR/BDR election</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Router priority (0-255) is the primary tiebreaker in OSPF elections. Setting a priority higher than other routers ensures it becomes the DR.</div>
+            </div>
+        </div>
+
+        <!-- Question 31 -->
+        <div class="question-card">
+            <div class="question-text">31. Which command enables OSPFv2 using router configuration mode?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – router ospf process-id</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>This command initializes the OSPF routing process on a Cisco router and moves the CLI context into router configuration mode. Step-by-step: Step 1: Enter privileged EXEC mode. Step 2: Type configure terminal to enter global configuration mode. Step 3: Type router ospf [process-id] to enable the process. Final command: router ospf process-id</div>
+            </div>
+        </div>
+
+        <!-- Question 32 -->
+        <div class="question-card">
+            <div class="question-text">32. What is the valid range of the OSPF process ID?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: D – 1-65,535</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>When configuring OSPF globally, the locally significant process ID must fall within the range of 1 to 65,535.</div>
+            </div>
+        </div>
+
+        <!-- Question 33 -->
+        <div class="question-card">
+            <div class="question-text">33. Which command is used to explicitly configure an OSPF router ID?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: D – router-id rid</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Within OSPF router configuration mode, the router-id [ip-address] command is used to statically assign the Router ID. Step-by-step: Step 1: Enter global configuration mode (configure terminal). Step 2: Enter OSPF configuration mode (router ospf [process-id]). Step 3: Type router-id [ip-address]. Final command: router-id rid</div>
+            </div>
+        </div>
+
+        <!-- Question 34 -->
+        <div class="question-card">
+            <div class="question-text">34. What is the first preference in the OSPF router ID selection order?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: D – Explicitly configured router ID</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>OSPF will always prefer a manually configured Router ID using the router-id command over any active physical or loopback IP addresses.</div>
+            </div>
+        </div>
+
+        <!-- Question 35 -->
+        <div class="question-card">
+            <div class="question-text">35. What is the second method used by Cisco IOS to select the router ID?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: B – Highest IPv4 address of a configured loopback interface</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>If no explicit Router ID is configured, OSPF defaults to the highest IP address configured on an active loopback interface.</div>
+            </div>
+        </div>
+
+        <!-- Question 36 -->
+        <div class="question-card">
+            <div class="question-text">36. Which command enables OSPF on an interface by using the interface configuration mode?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – ip ospf process-id area area-id</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Instead of using the network command in router mode, OSPFv2 can be enabled directly on a specific interface using this interface-level command. Step-by-step: Step 1: Enter global configuration mode (configure terminal). Step 2: Enter interface configuration mode (interface [interface-id]). Step 3: Apply OSPF directly to the interface. Final command: ip ospf process-id area area-id</div>
+            </div>
+        </div>
+
+        <!-- Question 37 -->
+        <div class="question-card">
+            <div class="question-text">37. Which OSPF area is used in a single-area OSPF configuration?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: D – Area 0</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>Area 0 is the backbone area. In a single-area OSPF design, all routers must be placed in Area 0 to ensure proper routing functionality.</div>
+            </div>
+        </div>
+
+        <!-- Question 38 -->
+        <div class="question-card">
+            <div class="question-text">38. Which command is used to suppress OSPF routing messages from an interface while still advertising its network?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – passive-interface</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>The passive-interface command prevents OSPF Hello packets from being sent out an interface, stopping adjacencies from forming on that port, but the network itself is still advertised to other routers. Step-by-step: Step 1: Enter OSPF router configuration mode (router ospf [process-id]). Step 2: Suppress OSPF messages on the target interface. Final command: passive-interface [interface-id]</div>
+            </div>
+        </div>
+
+        <!-- Question 39 -->
+        <div class="question-card">
+            <div class="question-text">39. Which command displays OSPF neighbor information?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – show ip ospf neighbor</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>This standard EXEC command verifies that an OSPF router has successfully formed adjacencies with its neighboring routers and displays their states. Step-by-step: Step 1: Ensure you are in privileged EXEC mode (or use do in config mode). Step 2: Enter the verification command. Final command: show ip ospf neighbor</div>
+            </div>
+        </div>
+
+        <!-- Question 40 -->
+        <div class="question-card">
+            <div class="question-text">40. Which command provides detailed information about an OSPF-enabled interface?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: B – show ip ospf interface</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>This command reveals OSPF-specific parameters applied to an interface, including its Area ID, Process ID, Cost, state (DR/BDR), and timer intervals. Step-by-step: Step 1: Ensure you are in privileged EXEC mode. Step 2: Enter the verification command. Final command: show ip ospf interface</div>
+            </div>
+        </div>
+
+        <!-- Question 41 -->
+        <div class="question-card">
+            <div class="question-text">41. What does a wildcard mask of 0.0.0.0 accomplish when used with an OSPF network command?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – It matches one exact IPv4 address</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>In a wildcard mask, a "0" means the bit must match exactly. Therefore, a mask of 0.0.0.0 dictates that all 32 bits must match the specified IP address perfectly, restricting OSPF to that single specific interface address.</div>
+            </div>
+        </div>
+
+        <!-- Question 42 -->
+        <div class="question-card">
+            <div class="question-text">42. An administrator wants to configure OSPF process 10 on R1. Which command should be entered?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – router ospf 10</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>This initiates the OSPF routing engine and assigns it a locally significant process ID of 10. Step-by-step: Step 1: Enter global configuration mode (configure terminal). Step 2: Initialize the OSPF process. Final command: router ospf 10</div>
+            </div>
+        </div>
+
+        <!-- Question 43 -->
+        <div class="question-card">
+            <div class="question-text">43. R1 has an interface with IP address 10.1.1.5. The administrator wants to enable OSPF only on that exact interface using the network command. Which command is appropriate?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – network 10.1.1.5 0.0.0.0 area 0</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>To match the exact IP address, the network command must specify the IP with a 0.0.0.0 wildcard mask. Step-by-step: Step 1: Enter OSPF router configuration mode (router ospf [process-id]). Step 2: Enter the exact IP and wildcard mask. Final command: network 10.1.1.5 0.0.0.0 area 0</div>
+            </div>
+        </div>
+
+        <!-- Question 44 -->
+        <div class="question-card">
+            <div class="question-text">44. An administrator wants to enable OSPF directly on GigabitEthernet 0/0/0 using process 10 in Area 0. Which command should be used?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: C – ip ospf 10 area 0</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>This is the correct interface-level configuration syntax to enable OSPF without using the global network command. Step-by-step: Step 1: Enter global configuration mode (configure terminal). Step 2: Access the specific interface (interface GigabitEthernet 0/0/0). Step 3: Enable OSPF on the interface directly. Final command: ip ospf 10 area 0</div>
+            </div>
+        </div>
+
+        <!-- Question 45 -->
+        <div class="question-card">
+            <div class="question-text">45. Which three goals make up the CIA Triad of network security?</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: B – Confidentiality, Integrity, Availability</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>The CIA Triad is the foundational model in cybersecurity, designed to guide policies for information security within an organization.</div>
+            </div>
+        </div>
+
+
+        <h2>Part II. True or False</h2>
+
+        <!-- TF 1 -->
+        <div class="question-card">
+            <div class="question-text">1. Use the router-id rid router configuration mode command to manually assign a router ID.</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: TRUE</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>The router-id [ip-address] command inside OSPF configuration mode is the standard method for manually assigning a unique Router ID. Step-by-step: Step 1: Enter OSPF router config mode (router ospf [process-id]). Step 2: Assign the ID manually. Final command: router-id [ip-address]</div>
+            </div>
+        </div>
+
+        <!-- TF 2 -->
+        <div class="question-card">
+            <div class="question-text">2. When configuring single-area OSPFv2, the network command must be configured with the same area-id value on all routers.</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: TRUE</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>For routers to form adjacencies and share routing tables in a single-area setup, they must all be configured to belong to the exact same area (typically Area 0).</div>
+            </div>
+        </div>
+
+        <!-- TF 3 -->
+        <div class="question-card">
+            <div class="question-text">3. The basic syntax for the network command is ip ospf process-id area area-id.</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: FALSE</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>That syntax is used for interface-specific configuration mode. The basic syntax for the standard global network command is: network [network-address] [wildcard-mask] area [area-id].</div>
+            </div>
+        </div>
+
+        <!-- TF 4 -->
+        <div class="question-card">
+            <div class="question-text">4. Remove the network commands using the delete form of the command.</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: FALSE</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>In Cisco IOS, commands are negated or removed using the no keyword, not delete. Step-by-step: Step 1: Enter OSPF router configuration mode (router ospf [process-id]). Step 2: Prepend the no keyword to the exact network statement. Final command: no network [ip-address] [wildcard-mask] area [area-id]</div>
+            </div>
+        </div>
+
+        <!-- TF 5 -->
+        <div class="question-card">
+            <div class="question-text">5. OSPFv2 is enabled using the router ospf area-id command.</div>
+            <button class="btn" onclick="toggleAnswer(this)">Show Answer</button>
+            <div class="answer-section">
+                <div class="answer-title">Answer: FALSE</div>
+                <div class="explanation-title">Explanation:</div>
+                <div>OSPFv2 is initialized globally using the process ID, not the area ID. The correct command is router ospf process-id.</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Function to toggle individual answers
+        function toggleAnswer(btn) {
+            const answerSection = btn.nextElementSibling;
+            
+            if (answerSection.classList.contains('active')) {
+                answerSection.classList.remove('active');
+                btn.textContent = 'Show Answer';
+            } else {
+                answerSection.classList.add('active');
+                btn.textContent = 'Hide Answer';
+            }
+        }
+
+        // Function to expand or collapse all answers at once
+        function toggleAll(show) {
+            const answerSections = document.querySelectorAll('.answer-section');
+            const buttons = document.querySelectorAll('.question-card .btn');
+            
+            for(let i = 0; i < answerSections.length; i++) {
+                if (show) {
+                    answerSections[i].classList.add('active');
+                    buttons[i].textContent = 'Hide Answer';
+                } else {
+                    answerSections[i].classList.remove('active');
+                    buttons[i].textContent = 'Show Answer';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
