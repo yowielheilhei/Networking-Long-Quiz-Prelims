@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Multiple Choice Quiz</title>
+    <title>Interactive Multiple Choice Quiz - Dark Mode</title>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --correct-color: #2ecc71;
-            --incorrect-color: #e74c3c;
-            --bg-color: #ecf0f1;
-            --card-bg: #ffffff;
-            --text-color: #333333;
+            /* Dark Mode Color Palette */
+            --primary-color: #64b5f6;      /* Light blue for headings and text emphasis */
+            --secondary-color: #2196f3;    /* Vibrant blue for borders and buttons */
+            --correct-color: #00e676;      /* Bright green for correct answers */
+            --incorrect-color: #ff5252;    /* Bright red for incorrect answers */
+            --bg-color: #121212;           /* Main dark background */
+            --card-bg: #1e1e1e;            /* Card dark background */
+            --text-color: #e0e0e0;         /* Light gray/white for main text */
+            --option-bg: #2a2a2a;          /* Background for choices */
+            --option-border: #404040;      /* Border for choices */
+            --option-hover: #333333;       /* Background on hover */
         }
 
         body {
@@ -34,6 +38,10 @@
             font-size: 2.2em;
             margin-bottom: 5px;
         }
+        
+        header p {
+            color: #a0a0a0; /* Slightly dimmed text for the subtitle */
+        }
 
         h2 {
             color: var(--primary-color);
@@ -52,18 +60,19 @@
         .score-board {
             position: sticky;
             top: 20px;
-            background: white;
+            background: var(--card-bg);
             padding: 15px 25px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             display: flex;
-            justify-content: space-between; /* Pushes score to left, button to right */
+            justify-content: space-between;
             align-items: center;
             font-size: 1.2em;
             font-weight: bold;
             color: var(--primary-color);
             z-index: 100;
             margin-bottom: 20px;
+            border: 1px solid #333;
         }
 
         .restart-btn {
@@ -76,11 +85,12 @@
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
         .restart-btn:hover {
             background-color: var(--primary-color);
+            color: #121212; /* Dark text on hover for contrast */
             transform: translateY(-2px);
         }
 
@@ -89,7 +99,7 @@
             border-radius: 10px;
             padding: 25px;
             margin-bottom: 25px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             border-left: 5px solid var(--secondary-color);
         }
 
@@ -97,7 +107,7 @@
             font-size: 1.15em;
             font-weight: 600;
             margin-bottom: 15px;
-            color: var(--primary-color);
+            color: #ffffff; /* Brighter white for the question itself */
         }
 
         .options-grid {
@@ -108,8 +118,8 @@
         }
 
         .option-btn {
-            background-color: #f8f9fa;
-            border: 2px solid #e9ecef;
+            background-color: var(--option-bg);
+            border: 2px solid var(--option-border);
             color: var(--text-color);
             padding: 12px 20px;
             font-size: 1em;
@@ -122,7 +132,7 @@
 
         .option-btn:hover:not(:disabled) {
             border-color: var(--secondary-color);
-            background-color: #eaf2f8;
+            background-color: var(--option-hover);
         }
 
         .option-btn:disabled {
@@ -133,20 +143,22 @@
         .option-btn.correct {
             background-color: var(--correct-color);
             border-color: var(--correct-color);
-            color: white;
+            color: #121212; /* Dark text on bright green background */
+            font-weight: bold;
         }
 
         .option-btn.incorrect {
             background-color: var(--incorrect-color);
             border-color: var(--incorrect-color);
-            color: white;
+            color: #ffffff;
+            font-weight: bold;
         }
 
         .explanation-box {
             display: none;
             margin-top: 15px;
             padding: 15px;
-            background-color: #e8f8f5;
+            background-color: rgba(0, 230, 118, 0.1); /* Subtle transparent green */
             border-left: 4px solid var(--correct-color);
             border-radius: 0 5px 5px 0;
             animation: fadeIn 0.4s ease-in-out;
@@ -158,7 +170,7 @@
 
         .explanation-title {
             font-weight: bold;
-            color: #0e6251;
+            color: var(--correct-color);
             margin-bottom: 5px;
         }
 
@@ -187,7 +199,7 @@
         <!-- Score Board with Restart Button added inside -->
         <div class="score-board">
             <span id="score-text">Score: 0 / 0</span>
-            <button class="restart-btn" onclick="restartQuiz()">Restart Quiz</button>
+            <button class="restart-btn" onclick="restartQuiz()">🔄 Restart Quiz</button>
         </div>
         
         <h2 id="part-1-title">I. Multiple Choice</h2>
