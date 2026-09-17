@@ -22,11 +22,27 @@
             line-height: 1.6;
             padding: 20px;
             margin: 0;
+            position: relative;
+        }
+
+        /* Hit Counter Styles */
+        .visitor-counter {
+            text-align: center;
+            margin-top: -15px;
+            margin-bottom: 20px;
+        }
+
+        .visitor-counter p {
+            margin: 0 0 5px 0;
+            font-size: 0.9em;
+            color: #7f8c8d;
+            font-weight: bold;
         }
 
         header {
             text-align: center;
             margin-bottom: 30px;
+            margin-top: 20px;
         }
 
         h1 {
@@ -46,6 +62,42 @@
         .quiz-container {
             max-width: 800px;
             margin: 0 auto;
+        }
+
+        /* Sticky Score Board with Flexbox for the Restart Button */
+        .score-board {
+            position: sticky;
+            top: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--primary-color);
+            z-index: 100;
+            margin-bottom: 20px;
+        }
+
+        .restart-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            font-size: 0.85em;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .restart-btn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
         }
 
         .question-card {
@@ -131,19 +183,12 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .score-board {
-            position: sticky;
-            top: 20px;
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: center;
-            font-size: 1.2em;
-            font-weight: bold;
-            color: var(--primary-color);
-            z-index: 100;
-            margin-bottom: 20px;
+        @media (max-width: 600px) {
+            .score-board {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -155,7 +200,19 @@
     </header>
 
     <div class="quiz-container">
-        <div class="score-board" id="score-board">Score: 0 / 0</div>
+        
+        <!-- Live Visitor Hit Counter -->
+        <div class="visitor-counter">
+            <p>Total Quiz Views</p>
+            <!-- Using a free API counter from seeyoufarm (no signup required) -->
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fnetworking-security-quiz-app.local&count_bg=%233498db&title_bg=%232c3e50&icon=&icon_color=%23E7E7E7&title=Views&edge_flat=true" alt="Page Views Counter"/>
+        </div>
+
+        <!-- Score Board with Restart Button -->
+        <div class="score-board">
+            <span id="score-text">Score: 0 / 0</span>
+            <button class="restart-btn" onclick="restartQuiz()">🔄 Restart Quiz</button>
+        </div>
         
         <h2 id="part-1-title">I. Multiple Choice</h2>
         <div id="mc-container"></div>
@@ -165,7 +222,6 @@
     </div>
 
     <script>
-        // Quiz Data - Distractors (wrong answers) have been generated logically for the blanks.
         const mcQuestions = [
             { q: "1. What type of routing protocol is OSPF?", ans: "C", exp: "Open Shortest Path First (OSPF) is an Interior Gateway Protocol (IGP) that relies on the link-state routing algorithm to create a complete topological map of the network.", options: { A: "Distance vector", B: "Path vector", C: "Link-state", D: "Hybrid" } },
             { q: "2. What does OSPF use to uniquely identify an OSPF router?", ans: "C", exp: "In an OSPF domain, every router requires a unique 32-bit identifier called a Router ID to uniquely identify it within the network topology.", options: { A: "MAC Address", B: "Process ID", C: "Router ID", D: "Area ID" } },
@@ -227,7 +283,22 @@
         const totalQuestions = mcQuestions.length + tfQuestions.length;
 
         function updateScore() {
-            document.getElementById('score-board').innerText = `Score: ${currentScore} / ${totalQuestions} (${Math.round((currentScore/totalQuestions)*100)}%)`;
+            const percentage = Math.round((currentScore / totalQuestions) * 100);
+            document.getElementById('score-text').innerText = `Score: ${currentScore} / ${totalQuestions} (${percentage}%)`;
+        }
+
+        function restartQuiz() {
+            currentScore = 0;
+            answeredQuestions = 0;
+            
+            document.getElementById('mc-container').innerHTML = '';
+            document.getElementById('tf-container').innerHTML = '';
+            
+            createQuiz(mcQuestions, 'mc-container', false);
+            createQuiz(tfQuestions, 'tf-container', true);
+            
+            updateScore();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function createQuiz(questions, containerId, isTF = false) {
@@ -253,17 +324,14 @@
                     btn.innerText = isTF ? key : `${key}. ${value}`;
                     
                     btn.onclick = function() {
-                        // Disable all buttons in this grid
                         const allBtns = optionsGrid.querySelectorAll('.option-btn');
                         allBtns.forEach(b => b.disabled = true);
 
-                        // Check answer
                         if (key === item.ans) {
                             btn.classList.add('correct');
                             currentScore++;
                         } else {
                             btn.classList.add('incorrect');
-                            // Highlight correct answer
                             allBtns.forEach(b => {
                                 if (b.innerText.startsWith(item.ans)) {
                                     b.classList.add('correct');
@@ -271,10 +339,7 @@
                             });
                         }
                         
-                        // Show explanation
                         expBox.classList.add('active');
-                        
-                        // Update Score
                         answeredQuestions++;
                         updateScore();
                     };
@@ -291,7 +356,6 @@
             });
         }
 
-        // Initialize Quiz
         window.onload = () => {
             createQuiz(mcQuestions, 'mc-container', false);
             createQuiz(tfQuestions, 'tf-container', true);
