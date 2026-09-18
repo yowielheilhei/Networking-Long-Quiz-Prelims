@@ -3,185 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Multiple Choice Quiz</title>
+    <title>Liquid Glass Networking Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Base (Light Mode) Variables */
+        /* Base Setup & Liquid Glass Variables */
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --correct-color: #2ecc71;
-            --incorrect-color: #e74c3c;
-            --bg-color: #ecf0f1;
-            --card-bg: #ffffff;
-            --text-color: #333333;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border-top: rgba(255, 255, 255, 0.4);
+            --glass-border-left: rgba(255, 255, 255, 0.15);
+            --glass-border-right: rgba(255, 255, 255, 0.05);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --glass-inner-glow: inset 0 2px 4px rgba(255, 255, 255, 0.15);
             
-            /* Additional variables for elements that change in dark mode */
-            --btn-bg: #f8f9fa;
-            --btn-border: #e9ecef;
-            --btn-hover: #eaf2f8;
-            --exp-bg: #e8f8f5;
-            --exp-title: #0e6251;
-        }
-
-        /* Auto Dark Mode Detection */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --primary-color: #85c1e9; /* Lighter blue for dark backgrounds */
-                --secondary-color: #3498db; 
-                --bg-color: #121212; /* Deep dark background */
-                --card-bg: #1e1e1e; /* Darker card background */
-                --text-color: #e0e0e0; /* Off-white text */
-                
-                --btn-bg: #2a2a2a;
-                --btn-border: #333333;
-                --btn-hover: #2c3e50;
-                --exp-bg: rgba(46, 204, 113, 0.1); /* Subtle transparent green */
-                --exp-title: #2ecc71; /* Bright green text */
-            }
+            --correct-glow: rgba(46, 204, 113, 0.3);
+            --incorrect-glow: rgba(231, 76, 60, 0.3);
+            --text-color: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            padding: 20px;
+            font-family: 'Montserrat', 'Helvetica Bold', Helvetica, sans-serif;
             margin: 0;
-            transition: background-color 0.3s, color 0.3s;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text-color);
+            background-color: #0f111a;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Ambient Background Orbs */
+        .ambient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        .orb-1 {
+            top: -10%; left: -10%;
+            width: 50vw; height: 50vw;
+            background: #1e3c72;
+            animation: float 12s ease-in-out infinite alternate;
+        }
+
+        .orb-2 {
+            bottom: -10%; right: -10%;
+            width: 40vw; height: 40vw;
+            background: #2a0845;
+            animation: float 15s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        /* Reusable Liquid Glass Class */
+        .liquid-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px) saturate(120%);
+            -webkit-backdrop-filter: blur(16px) saturate(120%);
+            border-top: 1px solid var(--glass-border-top);
+            border-left: 1px solid var(--glass-border-left);
+            border-right: 1px solid var(--glass-border-right);
+            border-bottom: 1px solid transparent;
+            box-shadow: var(--glass-shadow), var(--glass-inner-glow);
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            margin-top: 10px;
         }
 
         h1 {
-            color: var(--primary-color);
             font-size: 2.2em;
-            margin-bottom: 5px;
-            transition: color 0.3s;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+            letter-spacing: -0.5px;
         }
+        
+        p { color: var(--text-muted); }
 
         h2 {
-            color: var(--primary-color);
-            border-bottom: 3px solid var(--secondary-color);
+            font-size: 1.4em;
+            font-weight: 600;
+            margin: 40px 0 20px 0;
             padding-bottom: 10px;
-            margin-top: 40px;
+            border-bottom: 1px solid var(--glass-border-left);
             display: inline-block;
-            transition: color 0.3s;
         }
 
         .quiz-container {
-            max-width: 800px;
+            max-width: 750px;
             margin: 0 auto;
+            position: relative;
+            z-index: 10;
         }
 
-        /* Sticky Score Board with Flexbox for the Restart Button */
+        /* Sticky Glass Score Board */
         .score-board {
             position: sticky;
             top: 20px;
-            background: var(--card-bg); /* Now uses variable */
             padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 20px;
             display: flex;
-            justify-content: space-between; 
+            justify-content: space-between;
             align-items: center;
             font-size: 1.2em;
-            font-weight: bold;
-            color: var(--primary-color);
+            font-weight: 600;
             z-index: 100;
-            margin-bottom: 20px;
-            transition: background-color 0.3s, color 0.3s;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
         }
 
         .restart-btn {
-            background-color: var(--secondary-color);
+            background: rgba(255,255,255,0.1);
             color: white;
-            border: none;
-            padding: 10px 18px;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 20px;
             font-size: 0.85em;
-            font-weight: bold;
-            border-radius: 5px;
+            font-weight: 600;
+            border-radius: 50px; /* Pill shape */
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        .restart-btn:hover {
-            background-color: var(--primary-color);
-            transform: translateY(-2px);
+        /* Touch Animation for Restart Button */
+        .restart-btn:active {
+            transform: scale(0.92);
+            background: rgba(255,255,255,0.2);
         }
 
+        /* Glass Question Cards */
         .question-card {
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--secondary-color);
-            transition: background-color 0.3s;
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
         }
 
         .question-text {
-            font-size: 1.15em;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--primary-color);
-            transition: color 0.3s;
+            font-size: 1.2em;
+            font-weight: 500;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
 
         .options-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 15px;
         }
 
+        /* Liquid Glass Option Buttons */
         .option-btn {
-            background-color: var(--btn-bg);
-            border: 2px solid var(--btn-border);
+            background: rgba(255, 255, 255, 0.04);
+            border-top: 1px solid var(--glass-border-top);
+            border-left: 1px solid var(--glass-border-left);
+            border-right: 1px solid transparent;
+            border-bottom: 1px solid transparent;
             color: var(--text-color);
-            padding: 12px 20px;
-            font-size: 1em;
-            text-align: left;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
+            padding: 16px 20px;
+            font-size: 1.05em;
             font-weight: 500;
+            text-align: left;
+            border-radius: 16px; /* Slightly rounded rectangle */
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            font-family: inherit;
         }
 
+        /* Touch & Hover Animations */
         .option-btn:hover:not(:disabled) {
-            border-color: var(--secondary-color);
-            background-color: var(--btn-hover);
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2), var(--glass-inner-glow);
+        }
+
+        .option-btn:active:not(:disabled) {
+            transform: scale(0.96); /* The fluid touch shrink effect */
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .option-btn:disabled {
             cursor: default;
-            opacity: 0.7;
         }
 
+        /* Dynamic Correct / Incorrect States */
         .option-btn.correct {
-            background-color: var(--correct-color);
-            border-color: var(--correct-color);
-            color: white;
+            background: rgba(46, 204, 113, 0.2);
+            border-top: 1px solid rgba(46, 204, 113, 0.6);
+            border-left: 1px solid rgba(46, 204, 113, 0.3);
+            box-shadow: 0 0 20px var(--correct-glow), var(--glass-inner-glow);
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
         }
 
         .option-btn.incorrect {
-            background-color: var(--incorrect-color);
-            border-color: var(--incorrect-color);
-            color: white;
+            background: rgba(231, 76, 60, 0.2);
+            border-top: 1px solid rgba(231, 76, 60, 0.6);
+            border-left: 1px solid rgba(231, 76, 60, 0.3);
+            box-shadow: 0 0 20px var(--incorrect-glow), var(--glass-inner-glow);
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+            opacity: 0.7;
         }
 
+        /* Explanation Box */
         .explanation-box {
             display: none;
-            margin-top: 15px;
-            padding: 15px;
-            background-color: var(--exp-bg);
-            border-left: 4px solid var(--correct-color);
-            border-radius: 0 5px 5px 0;
-            animation: fadeIn 0.4s ease-in-out;
-            transition: background-color 0.3s;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 4px solid #2ecc71;
+            animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .explanation-box.active {
@@ -189,38 +231,47 @@
         }
 
         .explanation-title {
-            font-weight: bold;
-            color: var(--exp-title);
-            margin-bottom: 5px;
-            transition: color 0.3s;
+            font-weight: 700;
+            color: #2ecc71;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-15px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         @media (max-width: 600px) {
             .score-board {
                 flex-direction: column;
-                gap: 10px;
+                gap: 12px;
                 text-align: center;
+                padding: 20px;
+            }
+            .question-card {
+                padding: 20px;
             }
         }
     </style>
 </head>
 <body>
 
+    <!-- Ambient Background Elements -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+
     <header>
-        <h1>Interactive Networking & Security Quiz</h1>
-        <p>Select the best answer for each question. The explanation will appear after you answer.</p>
+        <h1>Networking & Security</h1>
+        <p>Interactive Liquid Glass UI Edition</p>
     </header>
 
     <div class="quiz-container">
-        <!-- Score Board with Restart Button added inside -->
-        <div class="score-board">
+        
+        <!-- Glass Score Board -->
+        <div class="score-board liquid-glass">
             <span id="score-text">Score: 0 / 0</span>
-            <button class="restart-btn" onclick="restartQuiz()">Restart Quiz</button>
+            <button class="restart-btn" onclick="restartQuiz()">🔄 Restart Quiz</button>
         </div>
         
         <h2 id="part-1-title">I. Multiple Choice</h2>
@@ -231,6 +282,7 @@
     </div>
 
     <script>
+        // Data arrays remain the exact same as previously configured
         const mcQuestions = [
             { q: "1. What type of routing protocol is OSPF?", ans: "C", exp: "Open Shortest Path First (OSPF) is an Interior Gateway Protocol (IGP) that relies on the link-state routing algorithm to create a complete topological map of the network.", options: { A: "Distance vector", B: "Path vector", C: "Link-state", D: "Hybrid" } },
             { q: "2. What does OSPF use to uniquely identify an OSPF router?", ans: "C", exp: "In an OSPF domain, every router requires a unique 32-bit identifier called a Router ID to uniquely identify it within the network topology.", options: { A: "MAC Address", B: "Process ID", C: "Router ID", D: "Area ID" } },
@@ -250,7 +302,7 @@
             { q: "16. Which type of cyberattack attempts to trick individuals into revealing sensitive information, such as usernames, passwords, credit card numbers, or other personal data?", ans: "C", exp: "Phishing uses social engineering (typically via deceptive emails or websites) to manipulate users into voluntarily giving up confidential information.", options: { A: "Malware", B: "DDoS", C: "Phishing Attack", D: "Zero-day exploit" } },
             { q: "17. Which type of hackers are ethical hackers who use their programming and technical skills for good, ethical, and legal purposes?", ans: "C", exp: "White hat hackers are authorized security professionals who seek out vulnerabilities to help organizations patch security flaws before malicious attackers can exploit them.", options: { A: "Gray Hat Hackers", B: "Red Hat Hackers", C: "White Hat Hackers", D: "Black Hat Hackers" } },
             { q: "18. Which type of hackers are unethical criminals who compromise computer and network security for personal gain or malicious purposes, such as attacking networks?", ans: "C", exp: "Black hat hackers illegally bypass security protocols for financial gain, data theft, or sheer malicious disruption.", options: { A: "White Hat Hackers", B: "Gray Hat Hackers", C: "Black Hat Hackers", D: "Green Hat Hackers" } },
-            { q: "19. What is the wildcard mask for the subnet mask 255.255.255.192?", ans: "B", exp: "The wildcard mask is found by subtracting the subnet mask from the global broadcast mask (255.255.255.255). (255-192=63). Result: 0.0.0.63", options: { A: "0.0.0.31", B: "0.0.0.63", C: "0.0.0.127", D: "0.0.0.255" } },
+            { q: "19. What is the wildcard mask for the subnet mask 255.255.255.192?", ans: "B", exp: "The wildcard mask is found by subtracting the subnet mask from the global broadcast mask (255.255.255.255). Result: 0.0.0.63", options: { A: "0.0.0.31", B: "0.0.0.63", C: "0.0.0.127", D: "0.0.0.255" } },
             { q: "20. A network uses the subnet mask /27. What is its corresponding wildcard mask?", ans: "C", exp: "A /27 prefix converts to the decimal subnet mask 255.255.255.224. Subtracting this from 255.255.255.255 gives 0.0.0.31.", options: { A: "0.0.0.15", B: "0.0.0.63", C: "0.0.0.31", D: "0.0.0.7" } },
             { q: "21. What is the wildcard mask for the subnet mask /22?", ans: "C", exp: "A /22 prefix converts to the decimal subnet mask 255.255.252.0. Subtracting from 255.255.255.255 gives 0.0.3.255.", options: { A: "0.0.1.255", B: "0.0.7.255", C: "0.0.3.255", D: "0.0.15.255" } },
             { q: "22. Which OSPF network type requires a Designated Router and Backup Designated Router?", ans: "B", exp: "In multiaccess networks (like Ethernet), a DR and BDR are elected to reduce OSPF traffic and the number of adjacencies that need to be maintained.", options: { A: "Point-to-Point", B: "Multiaccess", C: "Non-Broadcast", D: "Point-to-Multipoint" } },
@@ -292,29 +344,21 @@
         const totalQuestions = mcQuestions.length + tfQuestions.length;
 
         function updateScore() {
-            // Target only the score text span, so we don't accidentally remove the restart button
             const percentage = Math.round((currentScore / totalQuestions) * 100);
             document.getElementById('score-text').innerText = `Score: ${currentScore} / ${totalQuestions} (${percentage}%)`;
         }
 
-        // Programmatic restart functionality
         function restartQuiz() {
-            // Reset state variables
             currentScore = 0;
             answeredQuestions = 0;
             
-            // Clear existing elements in the DOM containers
             document.getElementById('mc-container').innerHTML = '';
             document.getElementById('tf-container').innerHTML = '';
             
-            // Re-render the fresh quiz
             createQuiz(mcQuestions, 'mc-container', false);
             createQuiz(tfQuestions, 'tf-container', true);
             
-            // Reset the score display
             updateScore();
-            
-            // Scroll back to the top of the page smoothly
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -323,7 +367,8 @@
             
             questions.forEach((item, index) => {
                 const card = document.createElement('div');
-                card.className = 'question-card';
+                // Apply the liquid glass UI utility class to the cards
+                card.className = 'question-card liquid-glass';
                 
                 const questionText = document.createElement('div');
                 questionText.className = 'question-text';
@@ -341,17 +386,15 @@
                     btn.innerText = isTF ? key : `${key}. ${value}`;
                     
                     btn.onclick = function() {
-                        // Disable all buttons in this grid
                         const allBtns = optionsGrid.querySelectorAll('.option-btn');
                         allBtns.forEach(b => b.disabled = true);
 
-                        // Check answer
                         if (key === item.ans) {
                             btn.classList.add('correct');
                             currentScore++;
                         } else {
                             btn.classList.add('incorrect');
-                            // Highlight correct answer
+                            // Highlight correct answer in glass green
                             allBtns.forEach(b => {
                                 if (b.innerText.startsWith(item.ans)) {
                                     b.classList.add('correct');
@@ -359,10 +402,7 @@
                             });
                         }
                         
-                        // Show explanation
                         expBox.classList.add('active');
-                        
-                        // Update Score
                         answeredQuestions++;
                         updateScore();
                     };
@@ -379,7 +419,6 @@
             });
         }
 
-        // Initialize Quiz on load
         window.onload = () => {
             createQuiz(mcQuestions, 'mc-container', false);
             createQuiz(tfQuestions, 'tf-container', true);
