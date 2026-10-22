@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NETWORKING | REVIEWER</title>
+    <title>NETWORKING MIDTERM | REVIEWER</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* Base Setup & Liquid Glass Variables */
+        *, *::before, *::after {
+            box-sizing: border-box; 
+        }
+        
         :root {
+            --glass-blur: 16px;
             --glass-bg: rgba(255, 255, 255, 0.03);
+            --btn-glass-bg: rgba(255, 255, 255, 0.04);
             --glass-border-top: rgba(255, 255, 255, 0.4);
             --glass-border-left: rgba(255, 255, 255, 0.15);
             --glass-border-right: rgba(255, 255, 255, 0.05);
@@ -32,7 +38,6 @@
             position: relative;
         }
 
-        /* Animated Ambient Background Orbs */
         .ambient-orb {
             position: fixed;
             border-radius: 50%;
@@ -60,11 +65,10 @@
             100% { transform: translate(50px, 50px) scale(1.1); }
         }
 
-        /* Reusable Liquid Glass Class */
         .liquid-glass {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px) saturate(120%);
-            -webkit-backdrop-filter: blur(16px) saturate(120%);
+            backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
             border-top: 1px solid var(--glass-border-top);
             border-left: 1px solid var(--glass-border-left);
             border-right: 1px solid var(--glass-border-right);
@@ -104,20 +108,65 @@
             z-index: 10;
         }
 
-        /* Sticky Glass Score Board */
         .score-board {
             position: sticky;
             top: 20px;
-            padding: 15px 25px;
-            border-radius: 20px;
+            padding: 20px 30px;
+            border-radius: 24px;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            font-size: 1.2em;
-            font-weight: 600;
+            font-size: 1.25em;
+            font-weight: 700;
             z-index: 100;
-            margin-bottom: 30px;
+            margin: 0 auto 30px auto;
             transition: all 0.3s ease;
+            gap: 16px;
+            width: fit-content;
+            min-width: 320px;
+            max-width: 100%; 
+            text-align: center;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            color: var(--text-color);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+        }
+
+        .slider-container input[type=range] {
+            -webkit-appearance: none;
+            width: 120px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            height: 6px;
+            outline: none;
+        }
+
+        .slider-container input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+            transition: transform 0.1s;
+        }
+
+        .slider-container input[type=range]::-webkit-slider-thumb:active {
+            transform: scale(1.3);
         }
 
         .restart-btn {
@@ -127,20 +176,18 @@
             padding: 10px 20px;
             font-size: 0.85em;
             font-weight: 600;
-            border-radius: 50px; /* Pill shape */
+            border-radius: 50px; 
             cursor: pointer;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        /* Touch Animation for Restart Button */
         .restart-btn:active {
             transform: scale(0.92);
             background: rgba(255,255,255,0.2);
         }
 
-        /* Glass Question Cards */
         .question-card {
             border-radius: 24px;
             padding: 30px;
@@ -162,9 +209,10 @@
             margin-bottom: 15px;
         }
 
-        /* Liquid Glass Option Buttons */
         .option-btn {
-            background: rgba(255, 255, 255, 0.04);
+            background: var(--btn-glass-bg);
+            backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
             border-top: 1px solid var(--glass-border-top);
             border-left: 1px solid var(--glass-border-left);
             border-right: 1px solid transparent;
@@ -174,13 +222,12 @@
             font-size: 1.05em;
             font-weight: 500;
             text-align: left;
-            border-radius: 16px; /* Slightly rounded rectangle */
+            border-radius: 16px; 
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             font-family: inherit;
         }
 
-        /* Touch & Hover Animations */
         .option-btn:hover:not(:disabled) {
             background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
@@ -188,7 +235,7 @@
         }
 
         .option-btn:active:not(:disabled) {
-            transform: scale(0.96); /* The fluid touch shrink effect */
+            transform: scale(0.96); 
             background: rgba(255, 255, 255, 0.15);
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
@@ -197,7 +244,6 @@
             cursor: default;
         }
 
-        /* Dynamic Correct / Incorrect States */
         .option-btn.correct {
             background: rgba(46, 204, 113, 0.2);
             border-top: 1px solid rgba(46, 204, 113, 0.6);
@@ -215,13 +261,12 @@
             opacity: 0.7;
         }
 
-        /* Explanation Box */
         .explanation-box {
             display: none;
             margin-top: 20px;
             padding: 20px;
             border-radius: 16px;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.3);
             border-left: 4px solid #2ecc71;
             animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -242,12 +287,11 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             .score-board {
-                flex-direction: column;
-                gap: 12px;
-                text-align: center;
+                width: 100%;
                 padding: 20px;
+                min-width: unset;
             }
             .question-card {
                 padding: 20px;
@@ -257,91 +301,101 @@
 </head>
 <body>
 
-    <!-- Ambient Background Elements -->
     <div class="ambient-orb orb-1"></div>
     <div class="ambient-orb orb-2"></div>
 
     <header>
-        <h1> Networking III - Networking Infrastructure Security</h1>
-        <p>Goodluck sa exams guys</p>
+        <h1>Networking Midterm</h1>
+        <p>Comprehensive 43-Item Reviewer</p>
     </header>
 
     <div class="quiz-container">
         
-        <!-- Glass Score Board -->
         <div class="score-board liquid-glass">
-            <span id="score-text">Score: 0 / 0</span>
+            <span id="score-text">Score: 0 / 43 (0%)</span>
+            
+            <div class="slider-container">
+                <span>Glass Intensity</span>
+                <input type="range" id="intensity-slider" min="0" max="100" value="50">
+            </div>
+
             <button class="restart-btn" onclick="restartQuiz()">Restart Quiz</button>
         </div>
         
-        <h2 id="part-1-title">I. Multiple Choice</h2>
+        <h2 id="part-1-title">Networking Concepts Review</h2>
         <div id="mc-container"></div>
-
-        <h2 id="part-2-title">II. True or False</h2>
-        <div id="tf-container"></div>
     </div>
 
     <script>
-        // Data arrays remain the exact same as previously configured
-        const mcQuestions = [
-            { q: "1. What type of routing protocol is OSPF?", ans: "C", exp: "Open Shortest Path First (OSPF) is an Interior Gateway Protocol (IGP) that relies on the link-state routing algorithm to create a complete topological map of the network.", options: { A: "Distance vector", B: "Path vector", C: "Link-state", D: "Hybrid" } },
-            { q: "2. What does OSPF use to uniquely identify an OSPF router?", ans: "C", exp: "In an OSPF domain, every router requires a unique 32-bit identifier called a Router ID to uniquely identify it within the network topology.", options: { A: "MAC Address", B: "Process ID", C: "Router ID", D: "Area ID" } },
-            { q: "3. Which OSPF packet is used to discover neighbors and establish neighbor adjacencies?", ans: "D", exp: "The OSPF Hello packet is sent periodically out of all OSPF-enabled interfaces to discover other OSPF routers and establish/maintain neighbor adjacencies.", options: { A: "Database Description", B: "Link-State Request", C: "Link-State Update", D: "Hello" } },
-            { q: "4. Which OSPF packet contains link-state advertisements?", ans: "D", exp: "Link-State Update (LSU) packets are used to reply to Link-State Requests and to announce new information. They contain one or multiple Link-State Advertisements (LSAs).", options: { A: "Hello", B: "Database Description", C: "Link-State Acknowledgment", D: "Link-State Update" } },
-            { q: "5. What is the purpose of the OSPF Hello packet?", ans: "B", exp: "Hello packets are explicitly designed to find neighboring routers on the same network segment and ensure bi-directional communication to form an adjacency.", options: { A: "Update routing tables", B: "Discover neighbors and establish adjacencies", C: "Request missing LSAs", D: "Acknowledge receipt of an LSU" } },
-            { q: "6. Which security principle ensures that only authorized users can access information?", ans: "C", exp: "Confidentiality ensures that sensitive data is kept private and is not disclosed to unauthorized individuals, programs, or processes.", options: { A: "Integrity", B: "Availability", C: "Confidentiality", D: "Authentication" } },
-            { q: "7. Which security principle ensures that data has not been altered without authorization?", ans: "D", exp: "Integrity guarantees that information is accurate, complete, and has not been modified or corrupted by unauthorized parties.", options: { A: "Confidentiality", B: "Availability", C: "Non-repudiation", D: "Integrity" } },
-            { q: "8. Which security principle ensures that authorized users can access information when needed?", ans: "C", exp: "Availability ensures that network systems, data, and applications are accessible and operational for authorized users whenever required.", options: { A: "Integrity", B: "Confidentiality", C: "Availability", D: "Authorization" } },
-            { q: "9. What is a firewall primarily used for?", ans: "A", exp: "A firewall is a network security device that monitors incoming and outgoing network traffic and decides whether to allow or block specific traffic based on a defined set of security rules.", options: { A: "Controlling and filtering network traffic", B: "Routing packets between networks", C: "Providing remote access", D: "Encrypting wireless data" } },
-            { q: "10. Why is network security implemented in multiple layers?", ans: "D", exp: "This is known as 'Defense in Depth.' If an attacker bypasses one security layer, subsequent layers provide backup protection, minimizing the overall risk.", options: { A: "To increase network speed", B: "To reduce hardware costs", C: "To simplify network management", D: "To provide multiple levels of protection against different threats" } },
-            { q: "11. An organization wants to protect its network from both external attackers and internal misuse. Which approach would provide the strongest protection?", ans: "D", exp: "Relying on a single security mechanism leaves vulnerabilities. Layered security (Defense in Depth) ensures protection from diverse attack vectors, both internal and external.", options: { A: "Install a single powerful firewall", B: "Train employees once a year", C: "Use strong passwords on all devices", D: "Use multiple security controls and apply security at different layers" } },
-            { q: "12. What is an asset in an organization?", ans: "B", exp: "In cybersecurity, an asset is any physical or digital entity (data, hardware, software, personnel) that has value to the organization and needs protection.", options: { A: "Only the physical servers", B: "Anything of value to the organization", C: "Only the digital data", D: "The network cables" } },
-            { q: "13. This protocol provides a secure remote access connection to network devices.", ans: "B", exp: "Secure Shell (SSH) is a cryptographic network protocol that provides a secure, encrypted alternative to unencrypted protocols like Telnet for remote administration.", options: { A: "Telnet", B: "SSH", C: "FTP", D: "HTTP" } },
-            { q: "14. Which type of cyberattack occurs when an attacker secretly intercepts and alters communication between two parties who believe they are communicating directly with each other?", ans: "C", exp: "In a Man-in-the-Middle (MitM) attack, the perpetrator inserts themselves into the communication channel to eavesdrop on or manipulate the traffic.", options: { A: "Denial of Service", B: "Phishing", C: "Man-in-the-Middle attack", D: "Ransomware" } },
-            { q: "15. Which type of cyberattack uses a trial-and-error method to guess login credentials, encryption keys, or other sensitive data by systematically trying all possible combinations?", ans: "B", exp: "A brute-force attack involves an automated script or tool attempting every possible combination of a password or key until the correct one is discovered.", options: { A: "SQL Injection", B: "Brute-Force Attack", C: "Cross-Site Scripting", D: "Spoofing" } },
-            { q: "16. Which type of cyberattack attempts to trick individuals into revealing sensitive information, such as usernames, passwords, credit card numbers, or other personal data?", ans: "C", exp: "Phishing uses social engineering (typically via deceptive emails or websites) to manipulate users into voluntarily giving up confidential information.", options: { A: "Malware", B: "DDoS", C: "Phishing Attack", D: "Zero-day exploit" } },
-            { q: "17. Which type of hackers are ethical hackers who use their programming and technical skills for good, ethical, and legal purposes?", ans: "C", exp: "White hat hackers are authorized security professionals who seek out vulnerabilities to help organizations patch security flaws before malicious attackers can exploit them.", options: { A: "Gray Hat Hackers", B: "Red Hat Hackers", C: "White Hat Hackers", D: "Black Hat Hackers" } },
-            { q: "18. Which type of hackers are unethical criminals who compromise computer and network security for personal gain or malicious purposes, such as attacking networks?", ans: "C", exp: "Black hat hackers illegally bypass security protocols for financial gain, data theft, or sheer malicious disruption.", options: { A: "White Hat Hackers", B: "Gray Hat Hackers", C: "Black Hat Hackers", D: "Green Hat Hackers" } },
-            { q: "19. What is the wildcard mask for the subnet mask 255.255.255.192?", ans: "B", exp: "The wildcard mask is found by subtracting the subnet mask from the global broadcast mask (255.255.255.255). Result: 0.0.0.63", options: { A: "0.0.0.31", B: "0.0.0.63", C: "0.0.0.127", D: "0.0.0.255" } },
-            { q: "20. A network uses the subnet mask /27. What is its corresponding wildcard mask?", ans: "C", exp: "A /27 prefix converts to the decimal subnet mask 255.255.255.224. Subtracting this from 255.255.255.255 gives 0.0.0.31.", options: { A: "0.0.0.15", B: "0.0.0.63", C: "0.0.0.31", D: "0.0.0.7" } },
-            { q: "21. What is the wildcard mask for the subnet mask /22?", ans: "C", exp: "A /22 prefix converts to the decimal subnet mask 255.255.252.0. Subtracting from 255.255.255.255 gives 0.0.3.255.", options: { A: "0.0.1.255", B: "0.0.7.255", C: "0.0.3.255", D: "0.0.15.255" } },
-            { q: "22. Which OSPF network type requires a Designated Router and Backup Designated Router?", ans: "B", exp: "In multiaccess networks (like Ethernet), a DR and BDR are elected to reduce OSPF traffic and the number of adjacencies that need to be maintained.", options: { A: "Point-to-Point", B: "Multiaccess", C: "Non-Broadcast", D: "Point-to-Multipoint" } },
-            { q: "23. What is the primary role of the Designated Router in a multiaccess OSPF network?", ans: "A", exp: "The DR acts as a central collection and distribution point for Link-State Advertisements (LSAs) on the multiaccess network, reducing network overhead.", options: { A: "Collect and distribute LSAs", B: "Forward data packets", C: "Maintain the routing table", D: "Establish adjacencies with all routers" } },
-            { q: "24. Why is a BDR elected in a multiaccess OSPF network?", ans: "A", exp: "The Backup Designated Router maintains full adjacencies and listens to routing updates so it can immediately become the DR if the current DR goes offline.", options: { A: "To take over the DR role if the DR fails", B: "To balance the load of the DR", C: "To connect to other areas", D: "To filter LSAs" } },
-            { q: "25. Which statement best describes an LSU and an LSA?", ans: "A", exp: "A Link-State Update (LSU) is a packet type that acts as an envelope. It can carry one or multiple Link-State Advertisements (LSAs) inside it.", options: { A: "An LSU can contain one or more LSAs", B: "An LSA can contain one or more LSUs", C: "LSU and LSA are the same thing", D: "LSAs are only used in multiaccess networks" } },
-            { q: "26. Why must neighboring OSPF routers have matching Hello parameters?", ans: "A", exp: "For two OSPF routers to form a neighbor relationship, their Hello interval, Dead interval, Area ID, and authentication settings must match exactly.", options: { A: "To establish an OSPF adjacency", B: "To elect a DR", C: "To share the routing table", D: "To calculate the shortest path" } },
-            { q: "27. A network administrator wants to identify a specific OSPF router in the OSPF domain. Which value should be examined?", ans: "C", exp: "The 32-bit Router ID uniquely identifies each router operating within the OSPF routing domain.", options: { A: "Process ID", B: "Area ID", C: "Router ID", D: "Interface IP" } },
-            { q: "28. A router has a router ID of 3.3.3.3, while the other routers have IDs of 1.1.1.1 and 2.2.2.2. In a multiaccess network with equal priorities, which router would normally be elected DR?", ans: "C", exp: "If OSPF router priorities are equal (default is 1), the router with the highest Router ID is elected as the Designated Router (DR).", options: { A: "Router 1.1.1.1", B: "Router 2.2.2.2", C: "Router 3.3.3.3", D: "The router that booted first" } },
-            { q: "29. R1 and R2 are connected through a point-to-point link. The administrator expects a DR and BDR election, but none occurs. Is this behavior expected?", ans: "C", exp: "In a point-to-point link, there are only two routers communicating. There is no need for a DR or BDR to manage overhead, so the election is bypassed.", options: { A: "No, a DR must always be elected", B: "Yes, point-to-point links only elect a DR", C: "Yes, point-to-point OSPF networks do not require a DR/BDR election", D: "No, a DR/BDR election happens on all links" } },
-            { q: "30. A network administrator changes the router priority of one OSPF router on a multiaccess network. What is the primary reason for making this change?", ans: "C", exp: "Router priority (0-255) is the primary tiebreaker in OSPF elections. Setting a priority higher than other routers ensures it becomes the DR.", options: { A: "To speed up routing updates", B: "To change the router ID", C: "To influence the DR/BDR election", D: "To assign the router to a new area" } },
-            { q: "31. Which command enables OSPFv2 using router configuration mode?", ans: "C", exp: "This command initializes the OSPF routing process on a Cisco router and moves the CLI context into router configuration mode.", options: { A: "ip ospf process-id", B: "router ospf area-id", C: "router ospf process-id", D: "network ospf process-id" } },
-            { q: "32. What is the valid range of the OSPF process ID?", ans: "D", exp: "When configuring OSPF globally, the locally significant process ID must fall within the range of 1 to 65,535.", options: { A: "0-255", B: "1-1024", C: "0-65,535", D: "1-65,535" } },
-            { q: "33. Which command is used to explicitly configure an OSPF router ID?", ans: "D", exp: "Within OSPF router configuration mode, the router-id [ip-address] command is used to statically assign the Router ID.", options: { A: "ip router-id rid", B: "ospf router-id rid", C: "id router rid", D: "router-id rid" } },
-            { q: "34. What is the first preference in the OSPF router ID selection order?", ans: "D", exp: "OSPF will always prefer a manually configured Router ID using the router-id command over any active physical or loopback IP addresses.", options: { A: "Highest active IP address", B: "Lowest active IP address", C: "Highest loopback IP address", D: "Explicitly configured router ID" } },
-            { q: "35. What is the second method used by Cisco IOS to select the router ID?", ans: "B", exp: "If no explicit Router ID is configured, OSPF defaults to the highest IP address configured on an active loopback interface.", options: { A: "Lowest IPv4 address of a configured loopback interface", B: "Highest IPv4 address of a configured loopback interface", C: "Highest physical interface IP", D: "Lowest physical interface IP" } },
-            { q: "36. Which command enables OSPF on an interface by using the interface configuration mode?", ans: "C", exp: "Instead of using the network command in router mode, OSPFv2 can be enabled directly on a specific interface using this interface-level command.", options: { A: "ospf process-id area area-id", B: "interface ospf process-id area area-id", C: "ip ospf process-id area area-id", D: "network ospf process-id area area-id" } },
-            { q: "37. Which OSPF area is used in a single-area OSPF configuration?", ans: "D", exp: "Area 0 is the backbone area. In a single-area OSPF design, all routers must be placed in Area 0 to ensure proper routing functionality.", options: { A: "Area 1", B: "Area 10", C: "Area 100", D: "Area 0" } },
-            { q: "38. Which command is used to suppress OSPF routing messages from an interface while still advertising its network?", ans: "C", exp: "The passive-interface command prevents OSPF Hello packets from being sent out an interface, stopping adjacencies from forming on that port.", options: { A: "suppress-interface", B: "no-hello-interface", C: "passive-interface", D: "silent-interface" } },
-            { q: "39. Which command displays OSPF neighbor information?", ans: "C", exp: "This standard EXEC command verifies that an OSPF router has successfully formed adjacencies with its neighboring routers and displays their states.", options: { A: "show ospf neighbor", B: "show ip neighbor ospf", C: "show ip ospf neighbor", D: "show ip route ospf" } },
-            { q: "40. Which command provides detailed information about an OSPF-enabled interface?", ans: "B", exp: "This command reveals OSPF-specific parameters applied to an interface, including its Area ID, Process ID, Cost, state (DR/BDR), and timer intervals.", options: { A: "show interface ospf", B: "show ip ospf interface", C: "show ospf interface", D: "show ip interface ospf" } },
-            { q: "41. What does a wildcard mask of 0.0.0.0 accomplish when used with an OSPF network command?", ans: "C", exp: "In a wildcard mask, a '0' means the bit must match exactly. A mask of 0.0.0.0 restricts OSPF to that single specific interface address.", options: { A: "It matches any IPv4 address", B: "It matches the subnet mask", C: "It matches one exact IPv4 address", D: "It disables OSPF on the interface" } },
-            { q: "42. An administrator wants to configure OSPF process 10 on R1. Which command should be entered?", ans: "C", exp: "This initiates the OSPF routing engine and assigns it a locally significant process ID of 10.", options: { A: "ip ospf 10", B: "router ospf area 10", C: "router ospf 10", D: "network ospf 10" } },
-            { q: "43. R1 has an interface with IP address 10.1.1.5. The administrator wants to enable OSPF only on that exact interface using the network command. Which command is appropriate?", ans: "C", exp: "To match the exact IP address, the network command must specify the IP with a 0.0.0.0 wildcard mask.", options: { A: "network 10.1.1.5 255.255.255.255 area 0", B: "network 10.1.1.0 0.0.0.255 area 0", C: "network 10.1.1.5 0.0.0.0 area 0", D: "network 10.1.1.5 0.0.0.0 area 10" } },
-            { q: "44. An administrator wants to enable OSPF directly on GigabitEthernet 0/0/0 using process 10 in Area 0. Which command should be used?", ans: "C", exp: "This is the correct interface-level configuration syntax to enable OSPF without using the global network command.", options: { A: "router ospf 10 area 0", B: "network 10 area 0", C: "ip ospf 10 area 0", D: "interface ospf 10 area 0" } },
-            { q: "45. Which three goals make up the CIA Triad of network security?", ans: "B", exp: "The CIA Triad is the foundational model in cybersecurity, designed to guide policies for information security within an organization.", options: { A: "Control, Integrity, Authentication", B: "Confidentiality, Integrity, Availability", C: "Confidentiality, Identity, Availability", D: "Control, Identity, Authorization" } }
-        ];
+        const slider = document.getElementById('intensity-slider');
+        
+        function updateGlassIntensity(value) {
+            const multiplier = value / 50; 
+            
+            document.documentElement.style.setProperty('--glass-blur', `${16 * multiplier}px`);
+            document.documentElement.style.setProperty('--glass-bg', `rgba(255, 255, 255, ${0.03 * multiplier})`);
+            document.documentElement.style.setProperty('--btn-glass-bg', `rgba(255, 255, 255, ${0.04 * multiplier})`);
+            document.documentElement.style.setProperty('--glass-border-top', `rgba(255, 255, 255, ${Math.min(1, 0.4 * multiplier)})`);
+            document.documentElement.style.setProperty('--glass-border-left', `rgba(255, 255, 255, ${Math.min(1, 0.15 * multiplier)})`);
+            document.documentElement.style.setProperty('--glass-border-right', `rgba(255, 255, 255, ${Math.min(1, 0.05 * multiplier)})`);
+            document.documentElement.style.setProperty('--glass-shadow', `0 8px 32px 0 rgba(0, 0, 0, ${0.3 * multiplier})`);
+            document.documentElement.style.setProperty('--glass-inner-glow', `inset 0 2px 4px rgba(255, 255, 255, ${Math.min(1, 0.15 * multiplier)})`);
+        }
 
-        const tfQuestions = [
-            { q: "1. Use the router-id rid router configuration mode command to manually assign a router ID.", ans: "True", exp: "The router-id [ip-address] command inside OSPF configuration mode is the standard method for manually assigning a unique Router ID." },
-            { q: "2. When configuring single-area OSPFv2, the network command must be configured with the same area-id value on all routers.", ans: "True", exp: "For routers to form adjacencies and share routing tables in a single-area setup, they must all be configured to belong to the exact same area (typically Area 0)." },
-            { q: "3. The basic syntax for the network command is ip ospf process-id area area-id.", ans: "False", exp: "That syntax is used for interface-specific configuration mode. The basic syntax for the standard global network command is: network [network-address] [wildcard-mask] area [area-id]." },
-            { q: "4. Remove the network commands using the delete form of the command.", ans: "False", exp: "In Cisco IOS, commands are negated or removed using the no keyword, not delete." },
-            { q: "5. OSPFv2 is enabled using the router ospf area-id command.", ans: "False", exp: "OSPFv2 is initialized globally using the process ID, not the area ID. The correct command is router ospf process-id." }
+        slider.addEventListener('input', (e) => {
+            updateGlassIntensity(e.target.value);
+        });
+        
+        // --- 43 Networking Questions Generated from Reviewer ---
+        const mcQuestions = [
+            { q: "1. What is the range of numbered standard ACLs?", ans: "A", exp: "The range of numbered standard ACLs is 1-99/1300-1999[cite: 1].", options: { A: "1-99/1300-1999", B: "100-199/2000-2699", C: "1-100", D: "0-255" } },
+            { q: "2. Where should you place the configuration of a standard ACL?", ans: "B", exp: "A standard ACL should be placed near the destination network[cite: 1].", options: { A: "Near the source network", B: "Near the destination network", C: "On the core router", D: "On the distribution switch" } },
+            { q: "3. Which ACL type can filter based on source, destination, and protocol?", ans: "C", exp: "An Extended ACL can filter based on source, destination, and protocol[cite: 1].", options: { A: "Standard ACL", B: "Named Standard ACL", C: "Extended ACL", D: "Basic ACL" } },
+            { q: "4. When a network administrator configures a standard IPv4 ACL, which information does this ACL primarily use to make filtering decisions?", ans: "A", exp: "Standard IPv4 ACLs make filtering decisions based on the source IP address[cite: 1].", options: { A: "Based on source IP address", B: "Based on destination IP address", C: "Based on MAC address", D: "Based on port numbers" } },
+            { q: "5. What are the two directions for applying a configuration ACL?", ans: "C", exp: "The two directions for applying a configuration ACL are inbound and outbound[cite: 1].", options: { A: "Inside and outside", B: "Internal and external", C: "Inbound and outbound", D: "Ingress and egress" } },
+            { q: "6. What is the purpose of a wildcard mask in ACL configuration?", ans: "B", exp: "The purpose of a wildcard mask is to specify which bits in the IP address should be checked to permit or deny[cite: 1].", options: { A: "Specify the default gateway", B: "Specify which bits in ip address should be checked (permits or deny)", C: "Define the exact subnet mask for the interface", D: "Identify the routing protocol to be used" } },
+            { q: "7. Why is a named ACL often preferred over a numbered ACL?", ans: "A", exp: "A named ACL is preferred because it is easier to identify and manage[cite: 1].", options: { A: "Named ACL is easier identify and manage", B: "Named ACL processes packets much faster", C: "Numbered ACLs cannot deny traffic", D: "Numbered ACLs are exclusively for IPv6" } },
+            { q: "8. What is the implicit deny rule?", ans: "C", exp: "The implicit deny rule means that all unmatched traffic is denied automatically[cite: 1].", options: { A: "All unmatched traffic is permitted automatically", B: "Unmatched traffic is logged for review", C: "All unmatched traffic is denied automatically", D: "It applies only to Extended ACLs" } },
+            { q: "9. Which command is used to view configured ACLs?", ans: "D", exp: "The command to view configured ACLs is 'show access-list'[cite: 1].", options: { A: "show running-config acl", B: "show ip route", C: "show interfaces acl", D: "show access-list" } },
+            { q: "10. Which ACL type can filter protocol?", ans: "B", exp: "The Extended ACL type can filter based on protocol[cite: 1].", options: { A: "Standard ACL", B: "Extended ACL", C: "Reflexive ACL", D: "MAC ACL" } },
+            { q: "11. What does the keyword 'any' mean in ACL configuration?", ans: "C", exp: "In ACL configuration, the keyword 'any' means any IP address[cite: 1].", options: { A: "A specific host address", B: "Any MAC address", C: "Any IP address", D: "Any configured interface" } },
+            { q: "12. In ACL configuration, what does 'host' imply?", ans: "B", exp: "The keyword 'host' means that it has 1 single IP address[cite: 1].", options: { A: "A range of IP addresses", B: "Have 1 single IP address", C: "A default gateway assignment", D: "A wildcard mask of 255.255.255.255" } },
+            { q: "13. Which command is used to start a named standard ACL configuration?", ans: "A", exp: "The command used is 'ip access-list standard acl-name'[cite: 1].", options: { A: "ip access-list standard acl-name", B: "access-list standard acl-name", C: "standard access-list acl-name", D: "ip access-group acl-name" } },
+            { q: "14. Which wildcard mask matches on exactly one IP address/a single host?", ans: "D", exp: "The wildcard mask that matches a single host is 0.0.0.0[cite: 1].", options: { A: "255.255.255.255", B: "0.0.0.255", C: "255.255.255.0", D: "0.0.0.0" } },
+            { q: "15. What command is used when applying an ACL to an interface?", ans: "B", exp: "The command used when applying an ACL to an interface is 'ip access-group'[cite: 1].", options: { A: "ip access-list", B: "ip access-group", C: "access-class", D: "interface access-list" } },
+            { q: "16. What is the proper way to remove/delete an ACL from an interface?", ans: "C", exp: "The command to remove an ACL from the interface is 'no ip access-group'[cite: 1].", options: { A: "delete access-group", B: "remove access-list", C: "no ip access-group", D: "clear ip access-list" } },
+            { q: "17. To configure ACL no. 10 inbound on interface g0/0, what command should you use?", ans: "A", exp: "The command is 'ip access-group 10 in'[cite: 1].", options: { A: "ip access-group 10 in", B: "access-group 10 in", C: "ip access-list 10 inbound", D: "apply acl 10 inbound" } },
+            { q: "18. Why should ACL rules be arranged carefully?", ans: "B", exp: "Rules should be arranged carefully to avoid permitting or denying traffic unintentionally[cite: 1].", options: { A: "To keep the router's memory usage low", B: "To avoid to permit or deny unintentionally the traffic", C: "Because the IOS requires alphabetical ordering", D: "To reduce CPU temperature spikes" } },
+            { q: "19. What does the command 'access-list 10 deny any' do?", ans: "D", exp: "It blocked all traffic / serves as the implicit deny rule[cite: 1].", options: { A: "Permits all traffic implicitly", B: "Deletes ACL 10 from the router", C: "Logs all dropped packets for ACL 10", D: "Blocked all traffic / implicit deny rule" } },
+            { q: "20. What is the main limitation of a standard ACL?", ans: "A", exp: "The main limitation is that it only uses the source IP to filter traffic[cite: 1].", options: { A: "Source IP to filter traffic", B: "It can only filter UDP packets", C: "It cannot deny traffic", D: "It can only be applied to loopback interfaces" } },
+            { q: "21. What command is used to delete an entire numbered ACL?", ans: "C", exp: "The command to delete a numbered ACL is 'no access-list'[cite: 1].", options: { A: "delete access-list", B: "remove access-list", C: "no access-list", D: "clear access-list" } },
+            { q: "22. Which wildcard mask matches the subnet 192.168.10.0/24?", ans: "B", exp: "The wildcard mask for a /24 subnet is 0.0.0.255[cite: 1].", options: { A: "255.255.255.0", B: "0.0.0.255", C: "0.0.0.0", D: "255.255.255.255" } },
+            { q: "23. An administrator wants to permit traffic from only host 192.168.1.25 using standard ACL 5. Which command could identify that host?", ans: "C", exp: "The command is 'access-list 5 permit host 192.168.1.25'[cite: 1].", options: { A: "access-list 5 permit 192.168.1.25 0.0.0.255", B: "ip access-group 5 permit 192.168.1.25", C: "access-list 5 permit host 192.168.1.25", D: "permit host 192.168.1.25 acl 5" } },
+            { q: "24. A network administrator wants to permit all hosts in the 192.168.10.0/24 subnet using standard ACL 10. What command should be used?", ans: "D", exp: "The command is 'access-list 10 permit 192.168.10.0 0.0.0.255'[cite: 1].", options: { A: "access-list 10 permit 192.168.10.0 255.255.255.0", B: "access-list 10 permit any 192.168.10.0", C: "ip access-list 10 permit 192.168.10.0", D: "access-list 10 permit 192.168.10.0 0.0.0.255" } },
+            { q: "25. Why are ACLs important for network security?", ans: "A", exp: "They control or restrict network access depending on the rule to deny or permit[cite: 1].", options: { A: "Control or restrict network access depends on rule to deny or permit", B: "They encrypt data packets securely", C: "They provide built-in antivirus protection", D: "They prevent physical hardware theft" } },
+            { q: "26. What is the default action/configuration at the end of each ACL?", ans: "B", exp: "The default configuration is 'deny any'[cite: 1].", options: { A: "permit any", B: "deny any", C: "log any", D: "redirect any" } },
+            { q: "27. Which ACL type offers detailed control when filtering traffic?", ans: "C", exp: "The Extended ACL has many controls when filtering traffic[cite: 1].", options: { A: "Standard ACL", B: "Named Standard ACL", C: "Extended ACL", D: "Reflexive ACL" } },
+            { q: "28. Which command displays configured ACLs regardless of whether they are standard or extended?", ans: "D", exp: "The commands are 'show access-list' or 'show ip access-list'[cite: 1].", options: { A: "show run acl", B: "show interfaces acl", C: "show ip route acl", D: "show access-list / show ip access-list" } },
+            { q: "29. In the context of an ACL, what is an ACE?", ans: "A", exp: "An ACE is an individual rule inside an ACL / statement[cite: 1].", options: { A: "Individual rule inside ACL / statement", B: "Access Control Encryption", C: "Access Command Environment", D: "A dynamic routing protocol feature" } },
+            { q: "30. What is the syntax/command structure to create a numbered standard ACL?", ans: "B", exp: "The command is 'access-list [ACL number] permit or deny [source id] [wildcard mask]'[cite: 1].", options: { A: "ip access-list [number]", B: "access-list ACL number permits or deny source id wildcard mask", C: "create acl [number] permit/deny", D: "access-group [number]" } },
+            { q: "31. What command is used to establish telnet connections on vty lines?", ans: "C", exp: "The command used to establish telnet connections is 'transport input telnet'[cite: 2].", options: { A: "line vty 0 4", B: "enable telnet", C: "transport input telnet", D: "ip telnet enable" } },
+            { q: "32. Which method of modifying an ACL allows a network administrator to insert, delete, or re-order specific ACEs?", ans: "D", exp: "Using a sequence number allows inserting, deleting, or re-ordering a specific ACE[cite: 2].", options: { A: "Line number", B: "Interface group", C: "Priority index", D: "Sequence number" } },
+            { q: "33. What is the primary purpose of NAT?", ans: "A", exp: "The primary purpose is to translate private IP into public IP addresses[cite: 2].", options: { A: "Translate private ip into public ip addresses", B: "Encrypt network traffic securely", C: "Assign IP addresses to hosts dynamically", D: "Block malicious internet traffic" } },
+            { q: "34. Why is there a need to translate addresses using NAT?", ans: "B", exp: "The primary use of NAT translation is to conserve public IPv4 addresses[cite: 2].", options: { A: "To increase internet bandwidth speed", B: "To conserve public ipv4 addresses", C: "To bypass external firewalls", D: "To fully implement IPv6 integration" } },
+            { q: "35. Which type of NAT uses a fixed mapping?", ans: "C", exp: "Static NAT uses a fixed mapping[cite: 2].", options: { A: "Dynamic NAT", B: "PAT", C: "Static NAT", D: "NAT Overload" } },
+            { q: "36. Which RFC 1918 private IPv4 address range belongs to Class C?", ans: "B", exp: "The Class C RFC 1918 range is 192.168.0.0/16[cite: 2].", options: { A: "10.0.0.0/8", B: "192.168.0.0/16", C: "172.16.0.0/12", D: "169.254.0.0/16" } },
+            { q: "37. Which command is used to verify NAT operations?", ans: "A", exp: "To verify NAT operations, use the 'show ip NAT translation' command[cite: 2].", options: { A: "show ip NAT translation", B: "show ip route", C: "show nat info", D: "show interfaces nat" } },
+            { q: "38. A computer has an IP address of 192.168.1.10 within a private network. According to NAT terminology, which term describes this address location relative to the NAT device?", ans: "D", exp: "This address location relative to the NAT device is described as a local address[cite: 2].", options: { A: "Global address", B: "Public address", C: "Outside address", D: "Local address" } },
+            { q: "39. An external web server has a publicly visible IP address of 203.0.113.10. According to NAT terminologies, what is it?", ans: "C", exp: "According to NAT terminologies, a publicly visible address is a global address[cite: 2].", options: { A: "Local address", B: "Inside address", C: "Global address", D: "Private address" } },
+            { q: "40. Which type of NAT uses a pool of IP addresses?", ans: "B", exp: "Dynamic NAT uses pool IP addresses[cite: 2].", options: { A: "Static NAT", B: "Dynamic NAT", C: "PAT", D: "NAT Overload" } },
+            { q: "41. What is another name for PAT (Port Address Translation)?", ans: "A", exp: "PAT is also referred to as NAT overload[cite: 2].", options: { A: "NAT overload", B: "Static NAT", C: "Dynamic NAT", D: "Port forwarding" } },
+            { q: "42. Which IOS command is used to configure a static NAT translation that maps an inside local IP address to a specific inside global IP address?", ans: "C", exp: "The command is 'ip nat inside source static'[cite: 2].", options: { A: "ip nat pool", B: "ip nat inside source dynamic", C: "ip nat inside source static", D: "ip nat outside source" } },
+            { q: "43. Which of the following correctly lists the 5 logical topology designs of a WAN?", ans: "B", exp: "The 5 logical topologies are Point-to-Point topology, Hub-and-Spoke, Full Mesh, Dual-homed Topology, and Partially Mesh[cite: 2].", options: { A: "Ring, Star, Bus, Mesh, Tree", B: "Point-to-Point topology, Hub-and-Spoke, Full Mesh, Dual-homed Topology, Partially Mesh", C: "Core, Distribution, Access, Edge, WAN", D: "Static, Dynamic, Default, Floating, Backup" } }
         ];
 
         let currentScore = 0;
         let answeredQuestions = 0;
-        const totalQuestions = mcQuestions.length + tfQuestions.length;
+        const totalQuestions = mcQuestions.length;
 
         function updateScore() {
             const percentage = Math.round((currentScore / totalQuestions) * 100);
@@ -353,21 +407,17 @@
             answeredQuestions = 0;
             
             document.getElementById('mc-container').innerHTML = '';
-            document.getElementById('tf-container').innerHTML = '';
-            
-            createQuiz(mcQuestions, 'mc-container', false);
-            createQuiz(tfQuestions, 'tf-container', true);
+            createQuiz(mcQuestions, 'mc-container');
             
             updateScore();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function createQuiz(questions, containerId, isTF = false) {
+        function createQuiz(questions, containerId) {
             const container = document.getElementById(containerId);
             
             questions.forEach((item, index) => {
                 const card = document.createElement('div');
-                // Apply the liquid glass UI utility class to the cards
                 card.className = 'question-card liquid-glass';
                 
                 const questionText = document.createElement('div');
@@ -378,12 +428,10 @@
                 const optionsGrid = document.createElement('div');
                 optionsGrid.className = 'options-grid';
 
-                let options = isTF ? { "True": "True", "False": "False" } : item.options;
-
-                for (const [key, value] of Object.entries(options)) {
+                for (const [key, value] of Object.entries(item.options)) {
                     const btn = document.createElement('button');
                     btn.className = 'option-btn';
-                    btn.innerText = isTF ? key : `${key}. ${value}`;
+                    btn.innerText = `${key}. ${value}`;
                     
                     btn.onclick = function() {
                         const allBtns = optionsGrid.querySelectorAll('.option-btn');
@@ -394,7 +442,6 @@
                             currentScore++;
                         } else {
                             btn.classList.add('incorrect');
-                            // Highlight correct answer in glass green
                             allBtns.forEach(b => {
                                 if (b.innerText.startsWith(item.ans)) {
                                     b.classList.add('correct');
@@ -420,8 +467,8 @@
         }
 
         window.onload = () => {
-            createQuiz(mcQuestions, 'mc-container', false);
-            createQuiz(tfQuestions, 'tf-container', true);
+            updateGlassIntensity(slider.value);
+            createQuiz(mcQuestions, 'mc-container');
             updateScore();
         };
     </script>
