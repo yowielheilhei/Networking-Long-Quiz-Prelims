@@ -4,13 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NETWORKING MIDTERM | REVIEWER</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Base Setup & Liquid Glass Variables */
-        *, *::before, *::after {
-            box-sizing: border-box; 
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'Helvetica Bold', 'Helvetica', 'sans-serif'],
+                    },
+                    keyframes: {
+                        float: {
+                            '0%': { transform: 'translate(0, 0) scale(1)' },
+                            '100%': { transform: 'translate(50px, 50px) scale(1.1)' }
+                        },
+                        slideDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-15px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
         }
-        
+    </script>
+
+    <!-- Base Setup & Liquid Glass Variables (Retained for JS Slider Support) -->
+    <style>
         :root {
             --glass-blur: 16px;
             --glass-bg: rgba(255, 255, 255, 0.03);
@@ -26,303 +50,34 @@
             --text-color: #ffffff;
             --text-muted: rgba(255, 255, 255, 0.6);
         }
-
-        body {
-            font-family: 'Montserrat', 'Helvetica Bold', Helvetica, sans-serif;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            color: var(--text-color);
-            background-color: #0f111a;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        .ambient-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(90px);
-            z-index: -1;
-            opacity: 0.6;
-        }
-
-        .orb-1 {
-            top: -10%; left: -10%;
-            width: 50vw; height: 50vw;
-            background: #1e3c72;
-            animation: float 12s ease-in-out infinite alternate;
-        }
-
-        .orb-2 {
-            bottom: -10%; right: -10%;
-            width: 40vw; height: 40vw;
-            background: #2a0845;
-            animation: float 15s ease-in-out infinite alternate-reverse;
-        }
-
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 50px) scale(1.1); }
-        }
-
-        .liquid-glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--glass-blur)) saturate(120%);
-            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
-            border-top: 1px solid var(--glass-border-top);
-            border-left: 1px solid var(--glass-border-left);
-            border-right: 1px solid var(--glass-border-right);
-            border-bottom: 1px solid transparent;
-            box-shadow: var(--glass-shadow), var(--glass-inner-glow);
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            margin-top: 10px;
-        }
-
-        h1 {
-            font-size: 2.2em;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
-            letter-spacing: -0.5px;
-        }
-        
-        p { color: var(--text-muted); }
-
-        h2 {
-            font-size: 1.4em;
-            font-weight: 600;
-            margin: 40px 0 20px 0;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--glass-border-left);
-            display: inline-block;
-        }
-
-        .quiz-container {
-            max-width: 750px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 10;
-        }
-
-        .score-board {
-            position: sticky;
-            top: 20px;
-            padding: 20px 30px;
-            border-radius: 24px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.25em;
-            font-weight: 700;
-            z-index: 100;
-            margin: 0 auto 30px auto;
-            transition: all 0.3s ease;
-            gap: 16px;
-            width: fit-content;
-            min-width: 320px;
-            max-width: 100%; 
-            text-align: center;
-        }
-
-        .slider-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            font-size: 0.75em;
-            font-weight: 600;
-            color: var(--text-color);
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px 20px;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 100%;
-        }
-
-        .slider-container input[type=range] {
-            -webkit-appearance: none;
-            width: 120px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 10px;
-            height: 6px;
-            outline: none;
-        }
-
-        .slider-container input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #ffffff;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(255,255,255,0.8);
-            transition: transform 0.1s;
-        }
-
-        .slider-container input[type=range]::-webkit-slider-thumb:active {
-            transform: scale(1.3);
-        }
-
-        .restart-btn {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 10px 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-            border-radius: 50px; 
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        .restart-btn:active {
-            transform: scale(0.92);
-            background: rgba(255,255,255,0.2);
-        }
-
-        .question-card {
-            border-radius: 24px;
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .question-text {
-            font-size: 1.2em;
-            font-weight: 500;
-            margin-bottom: 25px;
-            line-height: 1.5;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .option-btn {
-            background: var(--btn-glass-bg);
-            backdrop-filter: blur(var(--glass-blur)) saturate(120%);
-            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
-            border-top: 1px solid var(--glass-border-top);
-            border-left: 1px solid var(--glass-border-left);
-            border-right: 1px solid transparent;
-            border-bottom: 1px solid transparent;
-            color: var(--text-color);
-            padding: 16px 20px;
-            font-size: 1.05em;
-            font-weight: 500;
-            text-align: left;
-            border-radius: 16px; 
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            font-family: inherit;
-        }
-
-        .option-btn:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2), var(--glass-inner-glow);
-        }
-
-        .option-btn:active:not(:disabled) {
-            transform: scale(0.96); 
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .option-btn:disabled {
-            cursor: default;
-        }
-
-        .option-btn.correct {
-            background: rgba(46, 204, 113, 0.2);
-            border-top: 1px solid rgba(46, 204, 113, 0.6);
-            border-left: 1px solid rgba(46, 204, 113, 0.3);
-            box-shadow: 0 0 20px var(--correct-glow), var(--glass-inner-glow);
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-        }
-
-        .option-btn.incorrect {
-            background: rgba(231, 76, 60, 0.2);
-            border-top: 1px solid rgba(231, 76, 60, 0.6);
-            border-left: 1px solid rgba(231, 76, 60, 0.3);
-            box-shadow: 0 0 20px var(--incorrect-glow), var(--glass-inner-glow);
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-            opacity: 0.7;
-        }
-
-        .explanation-box {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 16px;
-            background: rgba(0, 0, 0, 0.3);
-            border-left: 4px solid #2ecc71;
-            animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .explanation-box.active {
-            display: block;
-        }
-
-        .explanation-title {
-            font-weight: 700;
-            color: #2ecc71;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @media (max-width: 768px) {
-            .score-board {
-                width: 100%;
-                padding: 20px;
-                min-width: unset;
-            }
-            .question-card {
-                padding: 20px;
-            }
-        }
     </style>
 </head>
-<body>
+<body class="font-sans m-0 p-5 min-h-screen text-[var(--text-color)] bg-[#0f111a] overflow-x-hidden relative">
 
-    <div class="ambient-orb orb-1"></div>
-    <div class="ambient-orb orb-2"></div>
+    <!-- Ambient Orbs -->
+    <div class="fixed rounded-full blur-[90px] -z-10 opacity-60 top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[#1e3c72] animate-[float_12s_ease-in-out_infinite_alternate]"></div>
+    <div class="fixed rounded-full blur-[90px] -z-10 opacity-60 bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-[#2a0845] animate-[float_15s_ease-in-out_infinite_alternate-reverse]"></div>
 
-    <header>
-        <h1>Networking Midterm</h1>
-        <p>Comprehensive 43-Item Reviewer</p>
+    <header class="text-center mb-10 mt-2.5">
+        <h1 class="text-[2.2em] font-bold mb-2.5 drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)] tracking-[-0.5px]">Networking Midterm</h1>
+        <p class="text-[var(--text-muted)]">Comprehensive 43-Item Reviewer</p>
     </header>
 
-    <div class="quiz-container">
+    <div class="max-w-[750px] mx-auto relative z-10">
         
-        <div class="score-board liquid-glass">
+        <!-- Score Board -->
+        <div class="sticky top-5 p-5 md:px-[30px] rounded-[24px] flex flex-col justify-center items-center text-[1.25em] font-bold z-[100] mx-auto mb-[30px] transition-all duration-300 ease-in-out gap-4 w-full md:w-fit min-w-0 md:min-w-[320px] max-w-full text-center bg-[var(--glass-bg)] backdrop-blur-[length:var(--glass-blur)] backdrop-saturate-[120%] border-t border-t-[var(--glass-border-top)] border-l border-l-[var(--glass-border-left)] border-r border-r-[var(--glass-border-right)] border-b border-b-transparent [box-shadow:var(--glass-shadow),var(--glass-inner-glow)]">
             <span id="score-text">Score: 0 / 43 (0%)</span>
             
-            <div class="slider-container">
+            <div class="flex items-center justify-center gap-3 text-[0.75em] font-semibold text-[var(--text-color)] bg-white/5 px-5 py-2.5 rounded-full border border-white/20 w-full">
                 <span>Glass Intensity</span>
-                <input type="range" id="intensity-slider" min="0" max="100" value="50">
+                <input type="range" id="intensity-slider" min="0" max="100" value="50" class="appearance-none w-[120px] bg-white/20 rounded-[10px] h-1.5 outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(255,255,255,0.8)] [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:duration-100 [&::-webkit-slider-thumb]:active:scale-[1.3]">
             </div>
 
-            <button class="restart-btn" onclick="restartQuiz()">Restart Quiz</button>
+            <button class="bg-white/10 text-white border border-white/20 px-5 py-2.5 text-[0.85em] font-semibold rounded-full cursor-pointer backdrop-blur-[10px] transition-all duration-200 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-white/20 active:scale-[0.92] active:bg-white/20" onclick="restartQuiz()">Restart Quiz</button>
         </div>
         
-        <h2 id="part-1-title">Networking Concepts Review</h2>
+        <h2 id="part-1-title" class="text-[1.4em] font-semibold my-10 pb-2.5 border-b border-b-[var(--glass-border-left)] inline-block">Networking Concepts Review</h2>
         <div id="mc-container"></div>
     </div>
 
@@ -415,22 +170,27 @@
 
         function createQuiz(questions, containerId) {
             const container = document.getElementById(containerId);
+            const liquidGlassClasses = 'bg-[var(--glass-bg)] backdrop-blur-[length:var(--glass-blur)] backdrop-saturate-[120%] border-t border-t-[var(--glass-border-top)] border-l border-l-[var(--glass-border-left)] border-r border-r-[var(--glass-border-right)] border-b border-b-transparent [box-shadow:var(--glass-shadow),var(--glass-inner-glow)]';
+            const btnBaseClasses = 'option-btn bg-[var(--btn-glass-bg)] backdrop-blur-[length:var(--glass-blur)] backdrop-saturate-[120%] border-t border-t-[var(--glass-border-top)] border-l border-l-[var(--glass-border-left)] border-r border-r-transparent border-b border-b-transparent text-[var(--text-color)] px-5 py-4 text-[1.05em] font-medium text-left rounded-[16px] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:-translate-y-[2px] hover:bg-white/10 hover:[box-shadow:0_10px_20px_rgba(0,0,0,0.2),var(--glass-inner-glow)] active:scale-[0.96] active:bg-white/15 active:[box-shadow:0_2px_10px_rgba(0,0,0,0.1)] disabled:cursor-default disabled:hover:translate-y-0 disabled:hover:bg-[var(--btn-glass-bg)] disabled:hover:shadow-none disabled:active:scale-100 disabled:active:bg-[var(--btn-glass-bg)] disabled:active:shadow-none'.split(' ');
             
+            const correctClasses = ['!bg-[#2ecc71]/20', '!border-t-[#2ecc71]/60', '!border-l-[#2ecc71]/30', '![box-shadow:0_0_20px_var(--correct-glow),var(--glass-inner-glow)]', '!drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]'];
+            const incorrectClasses = ['!bg-[#e74c3c]/20', '!border-t-[#e74c3c]/60', '!border-l-[#e74c3c]/30', '![box-shadow:0_0_20px_var(--incorrect-glow),var(--glass-inner-glow)]', '!drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]', 'opacity-70'];
+
             questions.forEach((item, index) => {
                 const card = document.createElement('div');
-                card.className = 'question-card liquid-glass';
+                card.className = `rounded-[24px] p-5 md:p-[30px] mb-[30px] ${liquidGlassClasses}`;
                 
                 const questionText = document.createElement('div');
-                questionText.className = 'question-text';
+                questionText.className = 'text-[1.2em] font-medium mb-[25px] leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]';
                 questionText.innerText = item.q;
                 card.appendChild(questionText);
 
                 const optionsGrid = document.createElement('div');
-                optionsGrid.className = 'options-grid';
+                optionsGrid.className = 'grid grid-cols-1 gap-3 mb-[15px]';
 
                 for (const [key, value] of Object.entries(item.options)) {
                     const btn = document.createElement('button');
-                    btn.className = 'option-btn';
+                    btn.classList.add(...btnBaseClasses);
                     btn.innerText = `${key}. ${value}`;
                     
                     btn.onclick = function() {
@@ -438,18 +198,19 @@
                         allBtns.forEach(b => b.disabled = true);
 
                         if (key === item.ans) {
-                            btn.classList.add('correct');
+                            btn.classList.add(...correctClasses);
                             currentScore++;
                         } else {
-                            btn.classList.add('incorrect');
+                            btn.classList.add(...incorrectClasses);
                             allBtns.forEach(b => {
                                 if (b.innerText.startsWith(item.ans)) {
-                                    b.classList.add('correct');
+                                    b.classList.add(...correctClasses);
                                 }
                             });
                         }
                         
-                        expBox.classList.add('active');
+                        expBox.classList.remove('hidden');
+                        expBox.classList.add('block');
                         answeredQuestions++;
                         updateScore();
                     };
@@ -458,8 +219,8 @@
                 card.appendChild(optionsGrid);
 
                 const expBox = document.createElement('div');
-                expBox.className = 'explanation-box';
-                expBox.innerHTML = `<div class="explanation-title">Explanation:</div>${item.exp}`;
+                expBox.className = 'hidden mt-5 p-5 rounded-[16px] bg-black/30 border-l-4 border-[#2ecc71] animate-[slideDown_0.4s_cubic-bezier(0.175,0.885,0.32,1.275)]';
+                expBox.innerHTML = `<div class="font-bold text-[#2ecc71] mb-2 tracking-[0.5px]">Explanation:</div>${item.exp}`;
                 card.appendChild(expBox);
 
                 container.appendChild(card);
