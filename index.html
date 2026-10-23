@@ -1,237 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NETWORKING MIDTERM | REVIEWER</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Tailwind Configuration -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Montserrat', 'Helvetica Bold', 'Helvetica', 'sans-serif'],
-                    },
-                    keyframes: {
-                        float: {
-                            '0%': { transform: 'translate(0, 0) scale(1)' },
-                            '100%': { transform: 'translate(50px, 50px) scale(1.1)' }
-                        },
-                        slideDown: {
-                            '0%': { opacity: '0', transform: 'translateY(-15px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' }
-                        }
-                    }
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Networking Midterm Exam</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto+Mono:wght@500;600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            main: 'var(--bg-main)',
+            textMain: 'var(--text-main)',
+            green: 'var(--green)',
+            red: 'var(--red)',
+            blue: 'var(--blue)',
+            primaryLight: 'var(--primary-light)',
+            primaryHover: 'var(--primary-hover)',
+            wordBg: 'var(--word-bg)',
+            muted: 'var(--muted)',
+            inputBg: 'var(--input-bg)',
+            figureBg: 'var(--figure-bg)',
+            codeBg: 'var(--code-bg)',
+            wireBg: 'var(--wire-bg)',
+            wireText: 'var(--wire-text)',
+            modalBg: 'var(--modal-bg)',
+            glass: 'var(--glass-bg)',
+            button: 'var(--button-bg)',
+            borderGlass: 'var(--border)'
+          },
+          fontFamily: {
+            sans: ['Montserrat', 'Arial', 'sans-serif'],
+            mono: ['"Roboto Mono"', 'Consolas', 'monospace']
+          },
+          animation: {
+            'stinger-pop': 'stingerPop 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'stinger-fade': 'stingerFadeUp 0.8s ease forwards 0.4s'
+          },
+          keyframes: {
+            stingerPop: {
+              '0%': { opacity: '0', transform: 'scale(0.8) translateY(20px)', filter: 'blur(10px)' },
+              '100%': { opacity: '1', transform: 'scale(1) translateY(0)', filter: 'blur(0)' }
+            },
+            stingerFadeUp: {
+              '0%': { opacity: '0', transform: 'translateY(15px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
             }
+          }
         }
-    </script>
+      }
+    }
+  </script>
 
-    <!-- Base Setup & Liquid Glass Variables (Retained for JS Slider Support) -->
-    <style>
-        :root {
-            --glass-blur: 16px;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --btn-glass-bg: rgba(255, 255, 255, 0.04);
-            --glass-border-top: rgba(255, 255, 255, 0.4);
-            --glass-border-left: rgba(255, 255, 255, 0.15);
-            --glass-border-right: rgba(255, 255, 255, 0.05);
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            --glass-inner-glow: inset 0 2px 4px rgba(255, 255, 255, 0.15);
-            
-            --correct-glow: rgba(46, 204, 113, 0.3);
-            --incorrect-glow: rgba(231, 76, 60, 0.3);
-            --text-color: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.6);
-        }
-    </style>
+  <!-- Core Theme Variables (Retained for Dynamic JS/System Dark Mode support) -->
+  <style>
+    :root {
+      /* Dark Theme (Default) */
+      --bg-main: #0c1221;
+      --text-main: #fff;
+      --glass-rgb: 255, 255, 255; 
+      
+      --blob-1: #1557a8;
+      --blob-2: #5b237e;
+      
+      --green: #58e09b;
+      --red: #ff7f88;
+      --blue: #80b8ff;
+      --primary-light: rgba(128, 184, 255, .16);
+      --primary-hover: rgba(255, 255, 255, .14);
+      --word-bg: rgba(128, 184, 255, .1);
+      
+      --muted: rgba(255, 255, 255, .72);
+      --input-bg: rgba(5, 12, 27, .68);
+      --figure-bg: rgba(7, 19, 42, .42);
+      --code-bg: #07111f;
+      --wire-bg: #17213a;
+      --wire-text: #ffe6a6;
+      --modal-bg: rgba(12, 18, 33, 0.85);
+      
+      /* Glass Settings modified by JS Slider */
+      --glass-blur: 16px;
+      --glass-bg: rgba(var(--glass-rgb), .045);
+      --button-bg: rgba(var(--glass-rgb), .075);
+      --border: rgba(var(--glass-rgb), .18);
+    }
+
+    /* Light Theme (Activates automatically based on device settings) */
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-main: #f0f4f9;
+        --text-main: #111827;
+        --glass-rgb: 0, 0, 0; 
+        
+        --blob-1: #93c5fd;
+        --blob-2: #d8b4e2;
+        
+        --green: #059669;
+        --red: #dc2626;
+        --blue: #2563eb;
+        --primary-light: rgba(37, 99, 235, .1);
+        --primary-hover: rgba(0, 0, 0, .05);
+        --word-bg: rgba(37, 99, 235, .08);
+        
+        --muted: rgba(0, 0, 0, .6);
+        --input-bg: rgba(255, 255, 255, .6);
+        --figure-bg: rgba(255, 255, 255, .4);
+        --code-bg: #e5e7eb;
+        --wire-bg: #ffffff;
+        --wire-text: #d97706;
+        --modal-bg: rgba(240, 244, 248, 0.85);
+      }
+    }
+  </style>
 </head>
-<body class="font-sans m-0 p-5 min-h-screen text-[var(--text-color)] bg-[#0f111a] overflow-x-hidden relative">
 
-    <!-- Ambient Orbs -->
-    <div class="fixed rounded-full blur-[90px] -z-10 opacity-60 top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[#1e3c72] animate-[float_12s_ease-in-out_infinite_alternate]"></div>
-    <div class="fixed rounded-full blur-[90px] -z-10 opacity-60 bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-[#2a0845] animate-[float_15s_ease-in-out_infinite_alternate-reverse]"></div>
+<body class="min-h-screen m-0 px-[12px] sm:px-[18px] pt-[16px] sm:pt-[24px] pb-[40px] sm:pb-[56px] overflow-x-hidden text-textMain font-sans bg-main transition-colors duration-300">
+  
+  <!-- Blurred Background Blobs -->
+  <div class="fixed -z-10 w-[48vw] h-[48vw] rounded-full blur-[90px] opacity-55 top-[-22vw] left-[-18vw] bg-[var(--blob-1)]"></div>
+  <div class="fixed -z-10 w-[48vw] h-[48vw] rounded-full blur-[90px] opacity-55 bottom-[-22vw] right-[-18vw] bg-[var(--blob-2)]"></div>
 
-    <header class="text-center mb-10 mt-2.5">
-        <h1 class="text-[2.2em] font-bold mb-2.5 drop-shadow-[0_2px_10px_rgba(255,255,255,0.2)] tracking-[-0.5px]">Networking Midterm</h1>
-        <p class="text-[var(--text-muted)]">Comprehensive 43-Item Reviewer</p>
-    </header>
+  <!-- STINGER INTRO -->
+  <div id="stinger" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-main transition-all duration-[600ms] ease-in-out opacity-100 visible [&.hide]:opacity-0 [&.hide]:invisible">
+    <div class="text-[clamp(1.8rem,8vw,4.5rem)] font-bold text-blue tracking-[0.08em] [text-shadow:0_0_24px_rgba(128,184,255,0.4)] animate-stinger-pop text-center px-[20px] leading-[1.2]">NETWORKING EXAM</div>
+    <div class="mt-[12px] font-mono text-[clamp(0.9rem,3vw,1.2rem)] text-green tracking-[0.15em] opacity-0 animate-stinger-fade">Ready na jay?...</div>
+  </div>
 
-    <div class="max-w-[750px] mx-auto relative z-10">
-        
-        <!-- Score Board -->
-        <div class="sticky top-5 p-5 md:px-[30px] rounded-[24px] flex flex-col justify-center items-center text-[1.25em] font-bold z-[100] mx-auto mb-[30px] transition-all duration-300 ease-in-out gap-4 w-full md:w-fit min-w-0 md:min-w-[320px] max-w-full text-center bg-[var(--glass-bg)] backdrop-blur-[length:var(--glass-blur)] backdrop-saturate-[120%] border-t border-t-[var(--glass-border-top)] border-l border-l-[var(--glass-border-left)] border-r border-r-[var(--glass-border-right)] border-b border-b-transparent [box-shadow:var(--glass-shadow),var(--glass-inner-glow)]">
-            <span id="score-text">Score: 0 / 43 (0%)</span>
-            
-            <div class="flex items-center justify-center gap-3 text-[0.75em] font-semibold text-[var(--text-color)] bg-white/5 px-5 py-2.5 rounded-full border border-white/20 w-full">
-                <span>Glass Intensity</span>
-                <input type="range" id="intensity-slider" min="0" max="100" value="50" class="appearance-none w-[120px] bg-white/20 rounded-[10px] h-1.5 outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-[0_0_10px_rgba(255,255,255,0.8)] [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:duration-100 [&::-webkit-slider-thumb]:active:scale-[1.3]">
-            </div>
-
-            <button class="bg-white/10 text-white border border-white/20 px-5 py-2.5 text-[0.85em] font-semibold rounded-full cursor-pointer backdrop-blur-[10px] transition-all duration-200 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:bg-white/20 active:scale-[0.92] active:bg-white/20" onclick="restartQuiz()">Restart Quiz</button>
-        </div>
-        
-        <h2 id="part-1-title" class="text-[1.4em] font-semibold my-10 pb-2.5 border-b border-b-[var(--glass-border-left)] inline-block">Networking Concepts Review</h2>
-        <div id="mc-container"></div>
+  <!-- DISCLAIMER MODAL -->
+  <div id="disclaimer-modal" class="fixed inset-0 z-[5000] flex items-center justify-center bg-modalBg backdrop-blur-[8px] transition-all duration-500 opacity-0 invisible [&.show]:opacity-100 [&.show]:visible [&.show>div]:translate-y-0 p-[20px]">
+    <div class="bg-glass border border-borderGlass shadow-[0_14px_42px_rgba(0,0,0,0.15),inset_0_1px_rgba(255,255,255,0.1)] p-[32px_24px] rounded-[20px] max-w-[420px] w-[90%] text-center translate-y-[20px] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+      <h3 class="m-0 mb-[12px] text-blue text-[1.4rem] font-bold">Heads Up!</h3>
+      <p class="text-muted leading-[1.6] m-0 mb-[24px] text-[0.95rem]">Disclaimer na practice exam lang po ito, hindi ibig sabihin na 100% na ganito din ang lalabas sa exam. Yun lang, salamat! Goodluck sa exams guys!</p>
+      <button type="button" id="close-modal-btn" class="w-full text-[1rem] p-[12px] border border-borderGlass text-textMain cursor-pointer transition-all duration-[0.18s] rounded-[12px] bg-primaryLight font-bold hover:-translate-y-[2px] hover:bg-primaryHover">Got it, Goodluck!</button>
     </div>
+  </div>
 
-    <script>
-        const slider = document.getElementById('intensity-slider');
-        
-        function updateGlassIntensity(value) {
-            const multiplier = value / 50; 
-            
-            document.documentElement.style.setProperty('--glass-blur', `${16 * multiplier}px`);
-            document.documentElement.style.setProperty('--glass-bg', `rgba(255, 255, 255, ${0.03 * multiplier})`);
-            document.documentElement.style.setProperty('--btn-glass-bg', `rgba(255, 255, 255, ${0.04 * multiplier})`);
-            document.documentElement.style.setProperty('--glass-border-top', `rgba(255, 255, 255, ${Math.min(1, 0.4 * multiplier)})`);
-            document.documentElement.style.setProperty('--glass-border-left', `rgba(255, 255, 255, ${Math.min(1, 0.15 * multiplier)})`);
-            document.documentElement.style.setProperty('--glass-border-right', `rgba(255, 255, 255, ${Math.min(1, 0.05 * multiplier)})`);
-            document.documentElement.style.setProperty('--glass-shadow', `0 8px 32px 0 rgba(0, 0, 0, ${0.3 * multiplier})`);
-            document.documentElement.style.setProperty('--glass-inner-glow', `inset 0 2px 4px rgba(255, 255, 255, ${Math.min(1, 0.15 * multiplier)})`);
-        }
+  <header class="max-w-[900px] mx-auto pt-[12px] px-[10px] pb-[28px] text-center">
+    <h1 class="m-0 mb-[10px] text-[clamp(1.9rem,5vw,2.8rem)] tracking-[-0.04em] font-bold">Networking Midterm Exam</h1>
+    <p class="m-0 text-muted">Comprehensive 43-Item Reviewer</p>
+  </header>
 
-        slider.addEventListener('input', (e) => {
-            updateGlassIntensity(e.target.value);
-        });
-        
-        // --- 43 Networking Questions Generated from Reviewer ---
-        const mcQuestions = [
-            { q: "1. What is the range of numbered standard ACLs?", ans: "A", exp: "The range of numbered standard ACLs is 1-99/1300-1999[cite: 1].", options: { A: "1-99/1300-1999", B: "100-199/2000-2699", C: "1-100", D: "0-255" } },
-            { q: "2. Where should you place the configuration of a standard ACL?", ans: "B", exp: "A standard ACL should be placed near the destination network[cite: 1].", options: { A: "Near the source network", B: "Near the destination network", C: "On the core router", D: "On the distribution switch" } },
-            { q: "3. Which ACL type can filter based on source, destination, and protocol?", ans: "C", exp: "An Extended ACL can filter based on source, destination, and protocol[cite: 1].", options: { A: "Standard ACL", B: "Named Standard ACL", C: "Extended ACL", D: "Basic ACL" } },
-            { q: "4. When a network administrator configures a standard IPv4 ACL, which information does this ACL primarily use to make filtering decisions?", ans: "A", exp: "Standard IPv4 ACLs make filtering decisions based on the source IP address[cite: 1].", options: { A: "Based on source IP address", B: "Based on destination IP address", C: "Based on MAC address", D: "Based on port numbers" } },
-            { q: "5. What are the two directions for applying a configuration ACL?", ans: "C", exp: "The two directions for applying a configuration ACL are inbound and outbound[cite: 1].", options: { A: "Inside and outside", B: "Internal and external", C: "Inbound and outbound", D: "Ingress and egress" } },
-            { q: "6. What is the purpose of a wildcard mask in ACL configuration?", ans: "B", exp: "The purpose of a wildcard mask is to specify which bits in the IP address should be checked to permit or deny[cite: 1].", options: { A: "Specify the default gateway", B: "Specify which bits in ip address should be checked (permits or deny)", C: "Define the exact subnet mask for the interface", D: "Identify the routing protocol to be used" } },
-            { q: "7. Why is a named ACL often preferred over a numbered ACL?", ans: "A", exp: "A named ACL is preferred because it is easier to identify and manage[cite: 1].", options: { A: "Named ACL is easier identify and manage", B: "Named ACL processes packets much faster", C: "Numbered ACLs cannot deny traffic", D: "Numbered ACLs are exclusively for IPv6" } },
-            { q: "8. What is the implicit deny rule?", ans: "C", exp: "The implicit deny rule means that all unmatched traffic is denied automatically[cite: 1].", options: { A: "All unmatched traffic is permitted automatically", B: "Unmatched traffic is logged for review", C: "All unmatched traffic is denied automatically", D: "It applies only to Extended ACLs" } },
-            { q: "9. Which command is used to view configured ACLs?", ans: "D", exp: "The command to view configured ACLs is 'show access-list'[cite: 1].", options: { A: "show running-config acl", B: "show ip route", C: "show interfaces acl", D: "show access-list" } },
-            { q: "10. Which ACL type can filter protocol?", ans: "B", exp: "The Extended ACL type can filter based on protocol[cite: 1].", options: { A: "Standard ACL", B: "Extended ACL", C: "Reflexive ACL", D: "MAC ACL" } },
-            { q: "11. What does the keyword 'any' mean in ACL configuration?", ans: "C", exp: "In ACL configuration, the keyword 'any' means any IP address[cite: 1].", options: { A: "A specific host address", B: "Any MAC address", C: "Any IP address", D: "Any configured interface" } },
-            { q: "12. In ACL configuration, what does 'host' imply?", ans: "B", exp: "The keyword 'host' means that it has 1 single IP address[cite: 1].", options: { A: "A range of IP addresses", B: "Have 1 single IP address", C: "A default gateway assignment", D: "A wildcard mask of 255.255.255.255" } },
-            { q: "13. Which command is used to start a named standard ACL configuration?", ans: "A", exp: "The command used is 'ip access-list standard acl-name'[cite: 1].", options: { A: "ip access-list standard acl-name", B: "access-list standard acl-name", C: "standard access-list acl-name", D: "ip access-group acl-name" } },
-            { q: "14. Which wildcard mask matches on exactly one IP address/a single host?", ans: "D", exp: "The wildcard mask that matches a single host is 0.0.0.0[cite: 1].", options: { A: "255.255.255.255", B: "0.0.0.255", C: "255.255.255.0", D: "0.0.0.0" } },
-            { q: "15. What command is used when applying an ACL to an interface?", ans: "B", exp: "The command used when applying an ACL to an interface is 'ip access-group'[cite: 1].", options: { A: "ip access-list", B: "ip access-group", C: "access-class", D: "interface access-list" } },
-            { q: "16. What is the proper way to remove/delete an ACL from an interface?", ans: "C", exp: "The command to remove an ACL from the interface is 'no ip access-group'[cite: 1].", options: { A: "delete access-group", B: "remove access-list", C: "no ip access-group", D: "clear ip access-list" } },
-            { q: "17. To configure ACL no. 10 inbound on interface g0/0, what command should you use?", ans: "A", exp: "The command is 'ip access-group 10 in'[cite: 1].", options: { A: "ip access-group 10 in", B: "access-group 10 in", C: "ip access-list 10 inbound", D: "apply acl 10 inbound" } },
-            { q: "18. Why should ACL rules be arranged carefully?", ans: "B", exp: "Rules should be arranged carefully to avoid permitting or denying traffic unintentionally[cite: 1].", options: { A: "To keep the router's memory usage low", B: "To avoid to permit or deny unintentionally the traffic", C: "Because the IOS requires alphabetical ordering", D: "To reduce CPU temperature spikes" } },
-            { q: "19. What does the command 'access-list 10 deny any' do?", ans: "D", exp: "It blocked all traffic / serves as the implicit deny rule[cite: 1].", options: { A: "Permits all traffic implicitly", B: "Deletes ACL 10 from the router", C: "Logs all dropped packets for ACL 10", D: "Blocked all traffic / implicit deny rule" } },
-            { q: "20. What is the main limitation of a standard ACL?", ans: "A", exp: "The main limitation is that it only uses the source IP to filter traffic[cite: 1].", options: { A: "Source IP to filter traffic", B: "It can only filter UDP packets", C: "It cannot deny traffic", D: "It can only be applied to loopback interfaces" } },
-            { q: "21. What command is used to delete an entire numbered ACL?", ans: "C", exp: "The command to delete a numbered ACL is 'no access-list'[cite: 1].", options: { A: "delete access-list", B: "remove access-list", C: "no access-list", D: "clear access-list" } },
-            { q: "22. Which wildcard mask matches the subnet 192.168.10.0/24?", ans: "B", exp: "The wildcard mask for a /24 subnet is 0.0.0.255[cite: 1].", options: { A: "255.255.255.0", B: "0.0.0.255", C: "0.0.0.0", D: "255.255.255.255" } },
-            { q: "23. An administrator wants to permit traffic from only host 192.168.1.25 using standard ACL 5. Which command could identify that host?", ans: "C", exp: "The command is 'access-list 5 permit host 192.168.1.25'[cite: 1].", options: { A: "access-list 5 permit 192.168.1.25 0.0.0.255", B: "ip access-group 5 permit 192.168.1.25", C: "access-list 5 permit host 192.168.1.25", D: "permit host 192.168.1.25 acl 5" } },
-            { q: "24. A network administrator wants to permit all hosts in the 192.168.10.0/24 subnet using standard ACL 10. What command should be used?", ans: "D", exp: "The command is 'access-list 10 permit 192.168.10.0 0.0.0.255'[cite: 1].", options: { A: "access-list 10 permit 192.168.10.0 255.255.255.0", B: "access-list 10 permit any 192.168.10.0", C: "ip access-list 10 permit 192.168.10.0", D: "access-list 10 permit 192.168.10.0 0.0.0.255" } },
-            { q: "25. Why are ACLs important for network security?", ans: "A", exp: "They control or restrict network access depending on the rule to deny or permit[cite: 1].", options: { A: "Control or restrict network access depends on rule to deny or permit", B: "They encrypt data packets securely", C: "They provide built-in antivirus protection", D: "They prevent physical hardware theft" } },
-            { q: "26. What is the default action/configuration at the end of each ACL?", ans: "B", exp: "The default configuration is 'deny any'[cite: 1].", options: { A: "permit any", B: "deny any", C: "log any", D: "redirect any" } },
-            { q: "27. Which ACL type offers detailed control when filtering traffic?", ans: "C", exp: "The Extended ACL has many controls when filtering traffic[cite: 1].", options: { A: "Standard ACL", B: "Named Standard ACL", C: "Extended ACL", D: "Reflexive ACL" } },
-            { q: "28. Which command displays configured ACLs regardless of whether they are standard or extended?", ans: "D", exp: "The commands are 'show access-list' or 'show ip access-list'[cite: 1].", options: { A: "show run acl", B: "show interfaces acl", C: "show ip route acl", D: "show access-list / show ip access-list" } },
-            { q: "29. In the context of an ACL, what is an ACE?", ans: "A", exp: "An ACE is an individual rule inside an ACL / statement[cite: 1].", options: { A: "Individual rule inside ACL / statement", B: "Access Control Encryption", C: "Access Command Environment", D: "A dynamic routing protocol feature" } },
-            { q: "30. What is the syntax/command structure to create a numbered standard ACL?", ans: "B", exp: "The command is 'access-list [ACL number] permit or deny [source id] [wildcard mask]'[cite: 1].", options: { A: "ip access-list [number]", B: "access-list ACL number permits or deny source id wildcard mask", C: "create acl [number] permit/deny", D: "access-group [number]" } },
-            { q: "31. What command is used to establish telnet connections on vty lines?", ans: "C", exp: "The command used to establish telnet connections is 'transport input telnet'[cite: 2].", options: { A: "line vty 0 4", B: "enable telnet", C: "transport input telnet", D: "ip telnet enable" } },
-            { q: "32. Which method of modifying an ACL allows a network administrator to insert, delete, or re-order specific ACEs?", ans: "D", exp: "Using a sequence number allows inserting, deleting, or re-ordering a specific ACE[cite: 2].", options: { A: "Line number", B: "Interface group", C: "Priority index", D: "Sequence number" } },
-            { q: "33. What is the primary purpose of NAT?", ans: "A", exp: "The primary purpose is to translate private IP into public IP addresses[cite: 2].", options: { A: "Translate private ip into public ip addresses", B: "Encrypt network traffic securely", C: "Assign IP addresses to hosts dynamically", D: "Block malicious internet traffic" } },
-            { q: "34. Why is there a need to translate addresses using NAT?", ans: "B", exp: "The primary use of NAT translation is to conserve public IPv4 addresses[cite: 2].", options: { A: "To increase internet bandwidth speed", B: "To conserve public ipv4 addresses", C: "To bypass external firewalls", D: "To fully implement IPv6 integration" } },
-            { q: "35. Which type of NAT uses a fixed mapping?", ans: "C", exp: "Static NAT uses a fixed mapping[cite: 2].", options: { A: "Dynamic NAT", B: "PAT", C: "Static NAT", D: "NAT Overload" } },
-            { q: "36. Which RFC 1918 private IPv4 address range belongs to Class C?", ans: "B", exp: "The Class C RFC 1918 range is 192.168.0.0/16[cite: 2].", options: { A: "10.0.0.0/8", B: "192.168.0.0/16", C: "172.16.0.0/12", D: "169.254.0.0/16" } },
-            { q: "37. Which command is used to verify NAT operations?", ans: "A", exp: "To verify NAT operations, use the 'show ip NAT translation' command[cite: 2].", options: { A: "show ip NAT translation", B: "show ip route", C: "show nat info", D: "show interfaces nat" } },
-            { q: "38. A computer has an IP address of 192.168.1.10 within a private network. According to NAT terminology, which term describes this address location relative to the NAT device?", ans: "D", exp: "This address location relative to the NAT device is described as a local address[cite: 2].", options: { A: "Global address", B: "Public address", C: "Outside address", D: "Local address" } },
-            { q: "39. An external web server has a publicly visible IP address of 203.0.113.10. According to NAT terminologies, what is it?", ans: "C", exp: "According to NAT terminologies, a publicly visible address is a global address[cite: 2].", options: { A: "Local address", B: "Inside address", C: "Global address", D: "Private address" } },
-            { q: "40. Which type of NAT uses a pool of IP addresses?", ans: "B", exp: "Dynamic NAT uses pool IP addresses[cite: 2].", options: { A: "Static NAT", B: "Dynamic NAT", C: "PAT", D: "NAT Overload" } },
-            { q: "41. What is another name for PAT (Port Address Translation)?", ans: "A", exp: "PAT is also referred to as NAT overload[cite: 2].", options: { A: "NAT overload", B: "Static NAT", C: "Dynamic NAT", D: "Port forwarding" } },
-            { q: "42. Which IOS command is used to configure a static NAT translation that maps an inside local IP address to a specific inside global IP address?", ans: "C", exp: "The command is 'ip nat inside source static'[cite: 2].", options: { A: "ip nat pool", B: "ip nat inside source dynamic", C: "ip nat inside source static", D: "ip nat outside source" } },
-            { q: "43. Which of the following correctly lists the 5 logical topology designs of a WAN?", ans: "B", exp: "The 5 logical topologies are Point-to-Point topology, Hub-and-Spoke, Full Mesh, Dual-homed Topology, and Partially Mesh[cite: 2].", options: { A: "Ring, Star, Bus, Mesh, Tree", B: "Point-to-Point topology, Hub-and-Spoke, Full Mesh, Dual-homed Topology, Partially Mesh", C: "Core, Distribution, Access, Edge, WAN", D: "Static, Dynamic, Default, Floating, Backup" } }
-        ];
+  <main class="max-w-[900px] mx-auto">
+    <section class="sticky top-[14px] z-10 grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-[16px] items-center mx-auto mb-[30px] p-[15px] sm:py-[17px] sm:px-[20px] rounded-[20px] border border-borderGlass bg-glass shadow-[0_14px_42px_rgba(0,0,0,.15),inset_0_1px_rgba(255,255,255,.1)] backdrop-blur-[length:var(--glass-blur)] backdrop-saturate-[1.25]" aria-label="Quiz controls">
+      <div>
+        <span id="score-text" class="font-bold text-[1.05rem]">Score: 0 / 43 (0%)</span>
+        <span id="progress-text" class="block mt-[4px] text-muted text-[0.78rem]">0 of 43 items answered</span>
+      </div>
+      <div class="flex gap-[10px] items-center justify-between sm:justify-end">
+        <label class="flex items-center gap-[8px] text-muted text-[0.78rem]">Glass <input type="range" id="intensity-slider" min="0" max="100" value="50" class="accent-[var(--blue)] w-[92px]"></label>
+        <button class="border border-borderGlass text-textMain cursor-pointer transition-all duration-[0.18s] px-[14px] py-[10px] rounded-[12px] bg-primaryLight font-bold whitespace-nowrap hover:-translate-y-[2px] hover:bg-primaryHover" type="button" id="restart-btn">Restart</button>
+      </div>
+    </section>
 
-        let currentScore = 0;
-        let answeredQuestions = 0;
-        const totalQuestions = mcQuestions.length;
+    <section aria-labelledby="part-i-heading">
+      <div class="mt-[36px] mb-[16px] p-[20px_22px] rounded-[18px] border border-borderGlass bg-glass shadow-[0_14px_42px_rgba(0,0,0,.15),inset_0_1px_rgba(255,255,255,.1)] backdrop-blur-[length:var(--glass-blur)] backdrop-saturate-[1.25]">
+        <h2 id="part-i-heading" class="m-0 mb-[8px] text-[clamp(1.25rem,3vw,1.55rem)] font-bold">Networking Concepts - Items 1-43</h2>
+        <p class="m-0 text-muted leading-[1.6]">Choose the best answer for each networking, ACL, and NAT concept.</p>
+      </div>
+      <div id="mc-container"></div>
+    </section>
+  </main>
 
-        function updateScore() {
-            const percentage = Math.round((currentScore / totalQuestions) * 100);
-            document.getElementById('score-text').innerText = `Score: ${currentScore} / ${totalQuestions} (${percentage}%)`;
-        }
+  <script>
+    const mcQuestions = [
+      { n: 1, q: "What is the range of numbered standard ACLs?", a: "A", e: "The range of numbered standard ACLs is 1-99/1300-1999.", o: { A: "1-99/1300-1999", B: "100-199/2000-2699", C: "1-100", D: "0-255" } },
+      { n: 2, q: "Where should you place the configuration of a standard ACL?", a: "B", e: "A standard ACL should be placed near the destination network.", o: { A: "Near the source network", B: "Near the destination network", C: "On the core router", D: "On the distribution switch" } },
+      { n: 3, q: "Which ACL type can filter based on source, destination, and protocol?", a: "C", e: "An Extended ACL can filter based on source, destination, and protocol.", o: { A: "Standard ACL", B: "Named Standard ACL", C: "Extended ACL", D: "Basic ACL" } },
+      { n: 4, q: "When a network administrator configures a standard IPv4 ACL, which information does this ACL primarily use to make filtering decisions?", a: "A", e: "Standard IPv4 ACLs make filtering decisions based on the source IP address.", o: { A: "Based on source IP address", B: "Based on destination IP address", C: "Based on MAC address", D: "Based on port numbers" } },
+      { n: 5, q: "What are the two directions for applying a configuration ACL?", a: "C", e: "The two directions for applying a configuration ACL are inbound and outbound.", o: { A: "Inside and outside", B: "Internal and external", C: "Inbound and outbound", D: "Ingress and egress" } },
+      { n: 6, q: "What is the purpose of a wildcard mask in ACL configuration?", a: "B", e: "The purpose of a wildcard mask is to specify which bits in the IP address should be checked to permit or deny.", o: { A: "Specify the default gateway", B: "Specify which bits in ip address should be checked (permits or deny)", C: "Define the exact subnet mask for the interface", D: "Identify the routing protocol to be used" } },
+      { n: 7, q: "Why is a named ACL often preferred over a numbered ACL?", a: "A", e: "A named ACL is preferred because it is easier to identify and manage.", o: { A: "Named ACL is easier identify and manage", B: "Named ACL processes packets much faster", C: "Numbered ACLs cannot deny traffic", D: "Numbered ACLs are exclusively for IPv6" } },
+      { n: 8, q: "What is the implicit deny rule?", a: "C", e: "The implicit deny rule means that all unmatched traffic is denied automatically.", o: { A: "All unmatched traffic is permitted automatically", B: "Unmatched traffic is logged for review", C: "All unmatched traffic is denied automatically", D: "It applies only to Extended ACLs" } },
+      { n: 9, q: "Which command is used to view configured ACLs?", a: "D", e: "The command to view configured ACLs is 'show access-list'.", o: { A: "show running-config acl", B: "show ip route", C: "show interfaces acl", D: "show access-list" } },
+      { n: 10, q: "Which ACL type can filter protocol?", a: "B", e: "The Extended ACL type can filter based on protocol.", o: { A: "Standard ACL", B: "Extended ACL", C: "Reflexive ACL", D: "MAC ACL" } },
+      { n: 11, q: "What does the keyword 'any' mean in ACL configuration?", a: "C", e: "In ACL configuration, the keyword 'any' means any IP address.", o: { A: "A specific host address", B: "Any MAC address", C: "Any IP address", D: "Any configured interface" } },
+      { n: 12, q: "In ACL configuration, what does 'host' imply?", a: "B", e: "The keyword 'host' means that it has 1 single IP address.", o: { A: "A range of IP addresses", B: "Have 1 single IP address", C: "A default gateway assignment", D: "A wildcard mask of 255.255.255.255" } },
+      { n: 13, q: "Which command is used to start a named standard ACL configuration?", a: "A", e: "The command used is 'ip access-list standard acl-name'.", o: { A: "ip access-list standard acl-name", B: "access-list standard acl-name", C: "standard access-list acl-name", D: "ip access-group acl-name" } },
+      { n: 14, q: "Which wildcard mask matches on exactly one IP address/a single host?", a: "D", e: "The wildcard mask that matches a single host is 0.0.0.0.", o: { A: "255.255.255.255", B: "0.0.0.255", C: "255.255.255.0", D: "0.0.0.0" } },
+      { n: 15, q: "What command is used when applying an ACL to an interface?", a: "B", e: "The command used when applying an ACL to an interface is 'ip access-group'.", o: { A: "ip access-list", B: "ip access-group", C: "access-class", D: "interface access-list" } },
+      { n: 16, q: "What is the proper way to remove/delete an ACL from an interface?", a: "C", e: "The command to remove an ACL from the interface is 'no ip access-group'.", o: { A: "delete access-group", B: "remove access-list", C: "no ip access-group", D: "clear ip access-list" } },
+      { n: 17, q: "To configure ACL no. 10 inbound on interface g0/0, what command should you use?", a: "A", e: "The command is 'ip access-group 10 in'.", o: { A: "ip access-group 10 in", B: "access-group 10 in", C: "ip access-list 10 inbound", D: "apply acl 10 inbound" } },
+      { n: 18, q: "Why should ACL rules be arranged carefully?", a: "B", e: "Rules should be arranged carefully to avoid permitting or denying traffic unintentionally.", o: { A: "To keep the router's memory usage low", B: "To avoid to permit or deny unintentionally the traffic", C: "Because the IOS requires alphabetical ordering", D: "To reduce CPU temperature spikes" } },
+      { n: 19, q: "What does the command 'access-list 10 deny any' do?", a: "D", e: "It blocked all traffic / serves as the implicit deny rule.", o: { A: "Permits all traffic implicitly", B: "Deletes ACL 10 from the router", C: "Logs all dropped packets for ACL 10", D: "Blocked all traffic / implicit deny rule" } },
+      { n: 20, q: "What is the main limitation of a standard ACL?", a: "A", e: "The main limitation is that it only uses the source IP to filter traffic.", o: { A: "Source IP to filter traffic", B: "It can only filter UDP packets", C: "It cannot deny traffic", D: "It can only be applied to loopback interfaces" } },
+      { n: 21, q: "What command is used to delete an entire numbered ACL?", a: "C", e: "The command to delete a numbered ACL is 'no access-list'.", o: { A: "delete access-list", B: "remove access-list", C: "no access-list", D: "clear access-list" } },
+      { n: 22, q: "Which wildcard mask matches the subnet 192.168.10.0/24?", a: "B", e: "The wildcard mask for a /24 subnet is 0.0.0.255.", o: { A: "255.255.255.0", B: "0.0.0.255", C: "0.0.0.0", D: "255.255.255.255" } },
+      { n: 23, q: "An administrator wants to permit traffic from only host 192.168.1.25 using standard ACL 5. Which command could identify that host?", a: "C", e: "The command is 'access-list 5 permit host 192.168.1.25'.", o: { A: "access-list 5 permit 192.168.1.25 0.0.0.255", B: "ip access-group 5 permit 192.168.1.25", C: "access-list 5 permit host 192.168.1.25", D: "permit host 192.168.1.25 acl 5" } },
+      { n: 24, q: "A network administrator wants to permit all hosts in the 192.168.10.0/24 subnet using standard ACL 10. What command should be used?", a: "D", e: "The command is 'access-list 10 permit 192.168.10.0 0.0.0.255'.", o: { A: "access-list 10 permit 192.168.10.0 255.255.255.0", B: "access-list 10 permit any 192.168.10.0", C: "ip access-list 10 permit 192.168.10.0", D: "access-list 10 permit 192.168.10.0 0.0.0.255" } },
+      { n: 25, q: "Why are ACLs important for network security?", a: "A", e: "They control or restrict network access depending on the rule to deny or permit.", o: { A: "Control or restrict network access depends on rule to deny or permit", B: "They encrypt data packets securely", C: "They provide built-in antivirus protection", D: "They prevent physical hardware theft" } },
+      { n: 26, q: "What is the default action/configuration at the end of each ACL?", a: "B", e: "The default configuration is 'deny any'.", o: { A: "permit any", B: "deny any", C: "log any", D: "redirect any" } },
+      { n: 27, q: "Which ACL type offers detailed control when filtering traffic?", a: "C", e: "The Extended ACL has many controls when filtering traffic.", o: { A: "Standard ACL", B: "Named Standard ACL", C: "Extended ACL", D: "Reflexive ACL" } },
+      { n: 28, q: "Which command displays configured ACLs regardless of whether they are standard or extended?", a: "D", e: "The commands are 'show access-list' or 'show ip access-list'.", o: { A: "show run acl", B: "show interfaces acl", C: "show ip route acl", D: "show access-list / show ip access-list" } },
+      { n: 29, q: "In the context of an ACL, what is an ACE?", a: "A", e: "An ACE is an individual rule inside an ACL / statement.", o: { A: "Individual rule inside ACL / statement", B: "Access Control Encryption", C: "Access Command Environment", D: "A dynamic routing protocol feature" } },
+      { n: 30, q: "What is the syntax/command structure to create a numbered standard ACL?", a: "B", e: "The command is 'access-list [ACL number] permit or deny [source id] [wildcard mask]'.", o: { A: "ip access-list [number]", B: "access-list ACL number permits or deny source id wildcard mask", C: "create acl [number] permit/deny", D: "access-group [number]" } },
+      { n: 31, q: "What command is used to establish telnet connections on vty lines?", a: "C", e: "The command used to establish telnet connections is 'transport input telnet'.", o: { A: "line vty 0 4", B: "enable telnet", C: "transport input telnet", D: "ip telnet enable" } },
+      { n: 32, q: "Which method of modifying an ACL allows a network administrator to insert, delete, or re-order specific ACEs?", a: "D", e: "Using a sequence number allows inserting, deleting, or re-ordering a specific ACE.", o: { A: "Line number", B: "Interface group", C: "Priority index", D: "Sequence number" } },
+      { n: 33, q: "What is the primary purpose of NAT?", a: "A", e: "The primary purpose is to translate private IP into public IP addresses.", o: { A: "Translate private ip into public ip addresses", B: "Encrypt network traffic securely", C: "Assign IP addresses to hosts dynamically", D: "Block malicious internet traffic" } },
+      { n: 34, q: "Why is there a need to translate addresses using NAT?", a: "B", e: "The primary use of NAT translation is to conserve public IPv4 addresses.", o: { A: "To increase internet bandwidth speed", B: "To conserve public ipv4 addresses", C: "To bypass external firewalls", D: "To fully implement IPv6 integration" } },
+      { n: 35, q: "Which type of NAT uses a fixed mapping?", a: "C", e: "Static NAT uses a fixed mapping.", o: { A: "Dynamic NAT", B: "PAT", C: "Static NAT", D: "NAT Overload" } },
+      { n: 36, q: "Which RFC 1918 private IPv4 address range belongs to Class C?", a: "B", e: "The Class C RFC 1918 range is 192.168.0.0/16.", o: { A: "10.0.0.0/8", B: "192.168.0.0/16", C: "172.16.0.0/12", D: "169.254.0.0/16" } },
+      { n: 37, q: "Which command is used to verify NAT operations?", a: "A", e: "To verify NAT operations, use the 'show ip NAT translation' command.", o: { A: "show ip NAT translation", B: "show ip route", C: "show nat info", D: "show interfaces nat" } },
+      { n: 38, q: "A computer has an IP address of 192.168.1.10 within a private network. According to NAT terminology, which term describes this address location relative to the NAT device?", a: "D", e: "This address location relative to the NAT device is described as a local address.", o: { A: "Global address", B: "Public address", C: "Outside address", D: "Local address" } },
+      { n: 39, q: "An external web server has a publicly visible IP address of 203.0.113.10. According to NAT terminologies, what is it?", a: "C", e: "According to NAT terminologies, a publicly visible address is a global address.", o: { A: "Local address", B: "Inside address", C: "Global address", D: "Private address" } },
+      { n: 40, q: "Which type of NAT uses a pool of IP addresses?", a: "B", e: "Dynamic NAT uses pool IP addresses.", o: { A: "Static NAT", B: "Dynamic NAT", C: "PAT", D: "NAT Overload" } },
+      { n: 41, q: "What is another name for PAT (Port Address Translation)?", a: "A", e: "PAT is also referred to as NAT overload.", o: { A: "NAT overload", B: "Static NAT", C: "Dynamic NAT", D: "Port forwarding" } },
+      { n: 42, q: "Which IOS command is used to configure a static NAT translation that maps an inside local IP address to a specific inside global IP address?", a: "C", e: "The command is 'ip nat inside source static'.", o: { A: "ip nat pool", B: "ip nat inside source dynamic", C: "ip nat inside source static", D: "ip nat outside source" } },
+      { n: 43, q: "Which of the following correctly lists the 5 logical topology designs of a WAN?", a: "B", e: "The 5 logical topologies are Point-to-Point topology, Hub-and-Spoke, Full Mesh, Dual-homed Topology, and Partially Mesh.", o: { A: "Ring, Star, Bus, Mesh, Tree", B: "Point-to-Point topology, Hub-and-Spoke, Full Mesh, Dual-homed Topology, Partially Mesh", C: "Core, Distribution, Access, Edge, WAN", D: "Static, Dynamic, Default, Floating, Backup" } }
+    ];
 
-        function restartQuiz() {
-            currentScore = 0;
-            answeredQuestions = 0;
-            
-            document.getElementById('mc-container').innerHTML = '';
-            createQuiz(mcQuestions, 'mc-container');
-            
-            updateScore();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    let currentScore = 0;
+    let answeredQuestions = 0;
+    const totalQuestions = mcQuestions.length;
 
-        function createQuiz(questions, containerId) {
-            const container = document.getElementById(containerId);
-            const liquidGlassClasses = 'bg-[var(--glass-bg)] backdrop-blur-[length:var(--glass-blur)] backdrop-saturate-[120%] border-t border-t-[var(--glass-border-top)] border-l border-l-[var(--glass-border-left)] border-r border-r-[var(--glass-border-right)] border-b border-b-transparent [box-shadow:var(--glass-shadow),var(--glass-inner-glow)]';
-            const btnBaseClasses = 'option-btn bg-[var(--btn-glass-bg)] backdrop-blur-[length:var(--glass-blur)] backdrop-saturate-[120%] border-t border-t-[var(--glass-border-top)] border-l border-l-[var(--glass-border-left)] border-r border-r-transparent border-b border-b-transparent text-[var(--text-color)] px-5 py-4 text-[1.05em] font-medium text-left rounded-[16px] cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] hover:-translate-y-[2px] hover:bg-white/10 hover:[box-shadow:0_10px_20px_rgba(0,0,0,0.2),var(--glass-inner-glow)] active:scale-[0.96] active:bg-white/15 active:[box-shadow:0_2px_10px_rgba(0,0,0,0.1)] disabled:cursor-default disabled:hover:translate-y-0 disabled:hover:bg-[var(--btn-glass-bg)] disabled:hover:shadow-none disabled:active:scale-100 disabled:active:bg-[var(--btn-glass-bg)] disabled:active:shadow-none'.split(' ');
-            
-            const correctClasses = ['!bg-[#2ecc71]/20', '!border-t-[#2ecc71]/60', '!border-l-[#2ecc71]/30', '![box-shadow:0_0_20px_var(--correct-glow),var(--glass-inner-glow)]', '!drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]'];
-            const incorrectClasses = ['!bg-[#e74c3c]/20', '!border-t-[#e74c3c]/60', '!border-l-[#e74c3c]/30', '![box-shadow:0_0_20px_var(--incorrect-glow),var(--glass-inner-glow)]', '!drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]', 'opacity-70'];
+    const slider = document.getElementById('intensity-slider');
+    slider.addEventListener('input', function (event) { updateGlassIntensity(event.target.value); });
+    document.getElementById('restart-btn').addEventListener('click', restartQuiz);
 
-            questions.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = `rounded-[24px] p-5 md:p-[30px] mb-[30px] ${liquidGlassClasses}`;
-                
-                const questionText = document.createElement('div');
-                questionText.className = 'text-[1.2em] font-medium mb-[25px] leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]';
-                questionText.innerText = item.q;
-                card.appendChild(questionText);
+    function updateGlassIntensity(value) {
+      const multiplier = Number(value) / 50;
+      document.documentElement.style.setProperty('--glass-blur', (16 * multiplier) + 'px');
+      document.documentElement.style.setProperty('--glass-bg', `rgba(var(--glass-rgb), ${.045 * multiplier})`);
+      document.documentElement.style.setProperty('--button-bg', `rgba(var(--glass-rgb), ${.075 * multiplier})`);
+      document.documentElement.style.setProperty('--border', `rgba(var(--glass-rgb), ${Math.min(.5, .18 * multiplier)})`);
+    }
 
-                const optionsGrid = document.createElement('div');
-                optionsGrid.className = 'grid grid-cols-1 gap-3 mb-[15px]';
+    function updateScore() {
+      const percent = Math.round((currentScore / totalQuestions) * 100);
+      document.getElementById('score-text').textContent = 'Score: ' + currentScore + ' / ' + totalQuestions + ' (' + percent + '%)';
+      document.getElementById('progress-text').textContent = answeredQuestions + ' of ' + totalQuestions + ' items answered';
+    }
 
-                for (const [key, value] of Object.entries(item.options)) {
-                    const btn = document.createElement('button');
-                    btn.classList.add(...btnBaseClasses);
-                    btn.innerText = `${key}. ${value}`;
-                    
-                    btn.onclick = function() {
-                        const allBtns = optionsGrid.querySelectorAll('.option-btn');
-                        allBtns.forEach(b => b.disabled = true);
+    function createCard(number, label, question) {
+      const card = document.createElement('article');
+      card.className = 'mb-[18px] p-[19px] sm:p-[24px] rounded-[18px] border border-borderGlass bg-glass shadow-[0_14px_42px_rgba(0,0,0,.15),inset_0_1px_rgba(255,255,255,.1)] backdrop-blur-[length:var(--glass-blur)] backdrop-saturate-[1.25]';
+      const tag = document.createElement('span');
+      tag.className = 'inline-block mb-[10px] text-blue text-[0.78rem] font-bold tracking-[0.08em] uppercase';
+      tag.textContent = 'Item ' + number + ' - ' + label;
+      const q = document.createElement('p');
+      q.className = 'm-0 mb-[17px] text-[1.03rem] font-semibold leading-[1.55]';
+      q.textContent = question;
+      card.append(tag, q);
+      return card;
+    }
 
-                        if (key === item.ans) {
-                            btn.classList.add(...correctClasses);
-                            currentScore++;
-                        } else {
-                            btn.classList.add(...incorrectClasses);
-                            allBtns.forEach(b => {
-                                if (b.innerText.startsWith(item.ans)) {
-                                    b.classList.add(...correctClasses);
-                                }
-                            });
-                        }
-                        
-                        expBox.classList.remove('hidden');
-                        expBox.classList.add('block');
-                        answeredQuestions++;
-                        updateScore();
-                    };
-                    optionsGrid.appendChild(btn);
-                }
-                card.appendChild(optionsGrid);
+    function answerResult(card, correct, message) {
+      if (card.dataset.answered === 'true') return;
+      card.dataset.answered = 'true';
+      card.querySelectorAll('button, input, select').forEach(function (control) { control.disabled = true; });
+      const result = document.createElement('div');
+      result.className = 'mt-[15px] p-[13px_14px] border rounded-[12px] leading-[1.48] text-[0.91rem] ' + 
+        (correct ? 'border-[#58e09b]/75 bg-[#58e09b]/15' : 'border-[#ff7f88]/75 bg-[#ff7f88]/15');
+      result.innerHTML = '<strong class="' + (correct ? 'text-green' : 'text-red') + '">' + (correct ? 'Correct.' : 'Not quite.') + '</strong> ' + message;
+      card.appendChild(result);
+      if (correct) currentScore += 1;
+      answeredQuestions += 1;
+      updateScore();
+    }
 
-                const expBox = document.createElement('div');
-                expBox.className = 'hidden mt-5 p-5 rounded-[16px] bg-black/30 border-l-4 border-[#2ecc71] animate-[slideDown_0.4s_cubic-bezier(0.175,0.885,0.32,1.275)]';
-                expBox.innerHTML = `<div class="font-bold text-[#2ecc71] mb-2 tracking-[0.5px]">Explanation:</div>${item.exp}`;
-                card.appendChild(expBox);
-
-                container.appendChild(card);
+    function renderMultipleChoice() {
+      const container = document.getElementById('mc-container');
+      mcQuestions.forEach(function (item) {
+        const card = createCard(item.n, 'Multiple Choice', item.q);
+        const options = document.createElement('div');
+        options.className = 'grid gap-[9px]';
+        Object.keys(item.o).forEach(function (key) {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'w-full px-[15px] py-[13px] rounded-[12px] bg-button text-left leading-[1.35] border border-borderGlass text-textMain cursor-pointer transition-all duration-[0.18s] hover:-translate-y-[2px] hover:bg-primaryHover disabled:cursor-default disabled:hover:translate-y-0 disabled:hover:bg-button';
+          button.textContent = key + '. ' + item.o[key];
+          button.addEventListener('click', function () {
+            if (card.dataset.answered === 'true') return;
+            const isCorrect = key === item.a;
+            options.querySelectorAll('button').forEach(function (option) {
+              if (option.textContent.indexOf(item.a + '.') === 0) {
+                option.classList.add('!border-[#58e09b]/75', '!bg-[#58e09b]/15');
+              }
             });
-        }
+            if (!isCorrect) button.classList.add('!border-[#ff7f88]/75', '!bg-[#ff7f88]/15');
+            answerResult(card, isCorrect, item.e);
+          });
+          options.appendChild(button);
+        });
+        card.appendChild(options);
+        container.appendChild(card);
+      });
+    }
 
-        window.onload = () => {
-            updateGlassIntensity(slider.value);
-            createQuiz(mcQuestions, 'mc-container');
-            updateScore();
-        };
-    </script>
+    function restartQuiz() {
+      currentScore = 0;
+      answeredQuestions = 0;
+      document.getElementById('mc-container').innerHTML = '';
+      renderMultipleChoice();
+      updateScore();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    updateGlassIntensity(slider.value);
+    restartQuiz();
+
+    // --- STINGER & MODAL LOGIC ---
+    window.addEventListener('load', function() {
+      const stinger = document.getElementById('stinger');
+      const modal = document.getElementById('disclaimer-modal');
+      const closeBtn = document.getElementById('close-modal-btn');
+      
+      setTimeout(function() {
+        stinger.classList.add('hide');
+        setTimeout(function() {
+          if(stinger) stinger.remove();
+          modal.classList.add('show');
+        }, 600);
+      }, 2200); 
+
+      closeBtn.addEventListener('click', function() {
+        modal.classList.remove('show');
+      });
+    });
+  </script>
 </body>
 </html>
